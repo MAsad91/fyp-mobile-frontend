@@ -43,7 +43,7 @@ const CertificatePermitScreen = () => {
       <View style={styles.addbutton}>
       <AddButton
         onPress={() => {
-          navigation.navigate("Root", { screen: "Certificate&Permit" });
+          navigation.navigate("Main", { screen: "Certificate&Permit", params:"post", });
         }}
       />
       </View>

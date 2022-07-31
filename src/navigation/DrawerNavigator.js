@@ -11,6 +11,7 @@ import CommunityServicesScreen from "../screens/CommunityServicesScreen";
 import CertificatePermitScreen from "../screens/CertificatePermitScreen";
 import EventsScreen from "../screens/EventsScreen";
 import MapScreen from "../screens/MapScreen";
+import SettingScreen from "../screens/SettingScreen";
 import LogoutScreen from "../screens/LogoutScreen";
 
 import TabNavigation from "./TabNavigation";
@@ -25,7 +26,7 @@ const DrawerNavigator = () => {
       screenOptions={{ headerShown: true }}
     >
       <Drawer.Screen
-        name="Root"
+        name="Main"
         component={StackNavigation}
         options={{
           drawerItemStyle: { display: "none" },
@@ -46,6 +47,7 @@ const DrawerNavigator = () => {
       />
       <Drawer.Screen name="Events" component={EventsScreen} />
       <Drawer.Screen name="Map" component={MapScreen} />
+      <Drawer.Screen name="Settings" component={SettingScreen} />
       <Drawer.Screen name="Logout" component={LogoutScreen} />
     </Drawer.Navigator>
   );

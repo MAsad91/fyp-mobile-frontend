@@ -32,7 +32,8 @@ const FoundItemsScreen = () => {
         {foundItemReport.map((user) => {
           return(
             <FoundItemReport 
-              key={user._id}
+              creator={user.creator}
+              id={user._id}
               founditemtype = {user.founditemtype}
               details = {user.details}
               description={user.description}
@@ -52,7 +53,7 @@ const FoundItemsScreen = () => {
     <View style={styles.addbutton}>
       <AddButton
             onPress={() => {
-              navigation.navigate("Root", { screen: "foundItemForm" });
+              navigation.navigate("Main", { screen: "FoundItemForm", params:"post", });
             }}
           />
     </View>

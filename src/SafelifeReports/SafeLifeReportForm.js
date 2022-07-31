@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute} from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
@@ -10,6 +10,7 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 
 const SafeLifeReportForm = () => {
+
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [name, setName] = useState("");

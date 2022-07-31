@@ -47,7 +47,7 @@ const CommunityServicesScreen = () => {
       <View style={styles.addbutton}>
         <AddButton
           onPress={() => {
-            navigation.navigate("Root", { screen: "CommunityServicesForm" });
+            navigation.navigate("Main", { screen: "CommunityServicesForm", params:"post", });
           }}
         />
       </View>

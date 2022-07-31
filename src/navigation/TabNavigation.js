@@ -21,6 +21,7 @@ const TabNavigation = () => {
     <Tab.Navigator
       initialRouteName="Home"
       activeColor="white"
+      screenOptions={{ headerShown: false }}
       barStyle={{ backgroundColor: "grey" }}
     >
       <Tab.Screen

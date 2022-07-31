@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState, useContext } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
@@ -12,6 +12,7 @@ import axios from "axios";
 const FoundItemForm = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
+
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
@@ -111,7 +112,7 @@ const FoundItemForm = () => {
       try {
         const response = await axios({
           method: "post",
-          url: `http://192.168.100.10:5000/found-report/reportform`,
+          url: `http://192.168.100.10:5000/found-report/reportform/`,
           data: {
             name: name,
             itemname: itemName,
@@ -152,7 +153,7 @@ const FoundItemForm = () => {
 
   return (
     <ScrollView>
-      <Label text="Name" />
+      <Label text={`\nName`} />
       <Input
         placeholder="Enter Your Name"
         onChangeText={(name) => {

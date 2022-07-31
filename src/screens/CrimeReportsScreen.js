@@ -36,7 +36,7 @@ const CrimeReportsScreen = () => {
         {crimeReport.map((user) => {
           return(
             <CrimeReportList 
-              key={user._id}
+              id={user._id}
               crimetype = {user.crimetype}
               details = {user.details}
               name = {user.name}
@@ -52,7 +52,7 @@ const CrimeReportsScreen = () => {
     <View style={styles.addbutton}>
       <AddButton
             onPress={() => {
-              navigation.navigate("Root", { screen: "CrimeReportForm" });
+              navigation.navigate("Main", { screen: "CrimeReportForm" , params:"post",});
             }}
           />
     </View>

@@ -12,7 +12,7 @@ import axios from "axios";
 
 const CommunityServicesForm = () => {
   const route = useRoute();
-  const requestMethod = route.params;
+  const requestId = route.params;
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
@@ -27,23 +27,24 @@ const CommunityServicesForm = () => {
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
 
   const handleSubmit = async () => {
-    if (name === "" && name.length < 3) {
+    if (name.length > 0 && name.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details === "" && details.length < 20) {
+    if (details.length > 0 && details.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    if (request == "servicetype" || request == "" || request.length === 0) {
-      setRequestError(true);
-      setRequestErrorMsg("Request type must be choose");
-      return;
-    } else {
+    // if (request == "servicetype" || request == "" || request.length === 0) {
+    //   setRequestError(true);
+    //   setRequestErrorMsg("Request type must be choose");
+    //   return;
+    // } 
+    else {
       try {
         const response = await axios({
-          method: "post",
-          url: `http://192.168.100.10:5000/request-communityservices/requestform`,
+          method: "patch",
+          url: `http://192.168.100.10:5000/request-communityservices/requestform/${requestId}`,
           data: {
             name: name,
             servicetype: request,
@@ -75,7 +76,7 @@ const CommunityServicesForm = () => {
         placeholder="Enter Name"
         onChangeText={(name) => {
           setName(name);
-          if (name.length < 3) {
+          if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
           } else {
@@ -92,16 +93,16 @@ const CommunityServicesForm = () => {
           selectedValue={request}
           onValueChange={(value) => {
             setRequest(value);
-            if (
-              request === "servicetype" &&
-              request === "" &&
-              request.length === 0
-            ) {
-              requestError(true);
-              requestErrorMsg("Request type must be choose");
-            } else {
-              requestError(false);
-            }
+            // if (
+            //   request === "servicetype" &&
+            //   request.length > 0 &&
+            //   request.length === 0
+            // ) {
+            //   requestError(true);
+            //   requestErrorMsg("Request type must be choose");
+            // } else {
+            //   requestError(false);
+            // }
           }}
           mode="dropdown"
           style={styles.picker}
@@ -122,7 +123,7 @@ const CommunityServicesForm = () => {
         placeholder="Enter details"
         onChangeText={(details) => {
           setDetails(details);
-          if (details.length < 20) {
+          if (details.length > 0 && details.length < 20) {
             setDetailsError(true);
             setDetailsErrorMsg("Details must have 20 or more characters");
           } else {

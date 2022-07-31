@@ -1,31 +1,82 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-import axios from "axios";
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-material-cards'
 
-const EventsDetail = () => {
-  const [eventsList, setEventsList] = useState([]);
-
-  useEffect(() => {
-    const fetchEventsList = async () => {
-      try {
-        const { data } = await axios.get(`http://192.168.10.9:5000/events`);
-        setEventsList(data);
-        console.log("Data---: ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
-    fetchEventsList();
-  }, []);
+const EventsDetail = ({id,details,eventtype,location,name,image}) => {
+  
 
   return (
-    <View>
-      <Text>Upcoming Events</Text>
+    <View style={styles.list}>
+          <Card style={styles.cardStyle}>
+            <CardImage 
+              src = {{uri:image}}
+              title="crime image"
+
+            />
+            <CardTitle 
+              title={eventtype} 
+              subtitle={`Details: ${details}`}
+              
+            />  
+            <CardAction separator={true}/>
+            
+            <CardContent
+              text={`\nEvent Name: ${name}\n\nLocation: ${location}`}
+            />
+            
+            
+            {/* <CardAction 
+              separator={true} 
+              inColumn={false}>
+              <CardButton
+                onPress={() => {}}
+                title="Edit"
+                color="black"
+              />
+              <CardButton
+                onPress={() => {}}
+                title="Delete"
+                color="red"
+              />
+            </CardAction> */}
+          </Card>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  list: {
+    flex:1,
+    flexDirection: "row",
+     justifyContent: "space-between",
+     width: "90%",
+     borderWidth: 1,
+     borderStyle: "solid",
+     borderColor: "white",
+     borderRadius: 5,
+     borderBottomWidth: 10,
+     borderBottomColor:'black',
+     backgroundColor: "snow",
+     padding: 1,
+     marginVertical: 12,
+     marginLeft:15,
+     marginTop:10
+   },
+   title: {
+     // color: "white",
+     fontSize: 20,
+     fontWeight: "bold",
+   },
+   text: {
+     // color: "white",
+     fontSize: 15,
+   },
+   count: {
+     // color: "white",
+     fontSize: 20,
+     fontWeight: "bold",
+     textAlignVertical: "center",
+   },
+});
 
 export default EventsDetail;

@@ -49,7 +49,7 @@ const SafeLifeReportScreen = () => {
       <View style={styles.addbutton}>
       <AddButton
         onPress={() => {
-          navigation.navigate("Root", { screen: "SafelifeForm" });
+          navigation.navigate("Main", { screen: "SafelifeForm",params:"post", });
         }}
       />
       </View>

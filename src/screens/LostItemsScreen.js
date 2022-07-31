@@ -32,7 +32,8 @@ const LostItemsScreen = () => {
         {lostItemReport.map((user) => {
           return(
             <LostItemReport 
-              key={user._id}
+              creator = {user.creator}
+              id={user._id}
               lostitemtype = {user.lostitemtype}
               details = {user.details}
               description={user.description}
@@ -52,7 +53,7 @@ const LostItemsScreen = () => {
     <View style={styles.addbutton}>
       <AddButton
             onPress={() => {
-              navigation.navigate("Root", { screen: "LostItemForm" });
+              navigation.navigate("Main", { screen: "LostItemForm" });
             }}
           />
     </View>

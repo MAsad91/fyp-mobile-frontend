@@ -13,7 +13,7 @@ const LostItemForm = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const route = useRoute();
-  const requestMethod = route.params;
+  const requestId = route.params;
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -71,46 +71,46 @@ const LostItemForm = () => {
       image
     );
 
-    if (name === "" && name.length < 3) {
+    if (name.length > 0 && name.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (itemName === "" && itemName.length < 4) {
+    if (itemName.length > 0 && itemName.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state === "" && state.length < 3) {
+    if (state.length > 0 && state.length < 3) {
       setStateError(true);
       setStateErrorMsg("Item State must have 3 or more characters");
     }
-    if (color === "" && color.length < 3) {
+    if (color.length > 0 && color.length < 3) {
       setColorError(true);
       setColorErrorMsg("Item color must have 3 or more characters");
     }
-    if (location === "" && location.length < 4) {
+    if (location.length > 0 && location.length < 4) {
       setLocationError(true);
       setLocationErrorMsg("Location must have 4 or more characters");
     }
-    if (details === "" && details.length < 4) {
+    if (details.length > 0 && details.length < 4) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 4 or more characters");
     }
-    if (description === "" && description.length < 15) {
+    if (description.length > 0 && description.length < 15) {
       setDescriptionError(true);
       setDescriptionErrorMsg("Description must have 15 or more characters");
     }
-    if (lostItem == "lostItemtype" || lostItem == "" || lostItem.length === 0) {
-      setLostItemError(true);
-      setLostItemErrorMsg("Lost item type must be choose");
-      return;
-    }
+    // if (lostItem == "lostItemtype" || lostItem == "" || lostItem.length === 0) {
+    //   setLostItemError(true);
+    //   setLostItemErrorMsg("Lost item type must be choose");
+    //   return;
+    // }
     if (!image) {
       return;
     } else {
       try {
         const response = await axios({
-          method: "post",
-          url: `http://192.168.100.10:5000/lost-report/reportform`,
+          method: "patch",
+          url: `http://192.168.100.10:5000/lost-report/reportform/${requestId}`,
           data: {
             name: name,
             itemname: itemName,
@@ -156,7 +156,7 @@ const LostItemForm = () => {
         placeholder="Enter Your Name"
         onChangeText={(name) => {
           setName(name);
-          if (name.length < 3) {
+          if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
           } else {
@@ -172,7 +172,7 @@ const LostItemForm = () => {
         placeholder="Enter Lost Item Name"
         onChangeText={(itemName) => {
           setItemName(itemName);
-          if (itemName.length < 4) {
+          if (itemName.length > 0 && itemName.length < 4) {
             setItemNameError(true);
             setItemNameErrorMsg("Item Name must have 4 or more characters");
           } else {
@@ -188,7 +188,7 @@ const LostItemForm = () => {
         placeholder="Enter State of Item e.g(old/new)"
         onChangeText={(state) => {
           setState(state);
-          if (state.length < 3) {
+          if (state.length > 0 && state.length < 3) {
             setStateError(true);
             setStateErrorMsg("Item State must have 3 or more characters");
           } else {
@@ -205,16 +205,16 @@ const LostItemForm = () => {
           selectedValue={lostItem}
           onValueChange={(value) => {
             setLostItem(value);
-            if (
-              lostItem === "lostItemtype" &&
-              lostItem === "" &&
-              lostItem.length === 0
-            ) {
-              setLostItemError(true);
-              setLostItemErrorMsg("Lost item type must be choose");
-            } else {
-              setLostItemError(false);
-            }
+            // if (
+            //   lostItem === "lostItemtype" &&
+            //   lostItem === "" &&
+            //   lostItem.length === 0
+            // ) {
+            //   setLostItemError(true);
+            //   setLostItemErrorMsg("Lost item type must be choose");
+            // } else {
+            //   setLostItemError(false);
+            // }
           }}
           mode="dropdown"
           style={styles.picker}
@@ -230,9 +230,9 @@ const LostItemForm = () => {
           <Picker.Item label="Child Affairs" value="childaffairs" />
           <Picker.Item label="Others" value="Others" />
         </Picker>
-        {lostItemError ? (
+        {/* {lostItemError ? (
           <Text style={{ color: "red" }}>{lostItemErrorMsg}</Text>
-        ) : null}
+        ) : null} */}
       </View>
 
       <Label text="Item Color" />
@@ -240,7 +240,7 @@ const LostItemForm = () => {
         placeholder="Enter Item Color"
         onChangeText={(color) => {
           setColor(color);
-          if (color.length < 3) {
+          if (color.length > 0 && color.length < 3) {
             setColorError(true);
             setColorErrorMsg("Item color must have 3 or more characters");
           } else {
@@ -256,7 +256,7 @@ const LostItemForm = () => {
         placeholder="Enter Lost Location"
         onChangeText={(location) => {
           setLocation(location);
-          if (location.length < 4) {
+          if (location.length > 0 && location.length < 4) {
             setLocationError(true);
             setLocationErrorMsg("Location must have 4 or more characters");
           } else {
@@ -272,7 +272,7 @@ const LostItemForm = () => {
         placeholder="Enter Details"
         onChangeText={(details) => {
           setDetails(details);
-          if (details.length < 4) {
+          if (details.length > 0 && details.length < 4) {
             setDetailsError(true);
             setDetailsErrorMsg("Details must have 4 or more characters");
           } else {
@@ -288,7 +288,7 @@ const LostItemForm = () => {
         placeholder="Enter Description"
         onChangeText={(description) => {
           setDescription(description);
-          if (description.length < 15) {
+          if (description.length > 0 && description.length < 15) {
             setDescriptionError(true);
             setDescriptionErrorMsg(
               "Description must have 15 or more characters"
@@ -304,7 +304,7 @@ const LostItemForm = () => {
       <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {!image && <Text style={styles.error}>Image must be choose</Text>}
+        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />

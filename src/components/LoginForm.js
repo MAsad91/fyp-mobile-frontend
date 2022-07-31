@@ -35,6 +35,7 @@ const LoginForm = () => {
       console.log("response---", response);
       auth.login(response.data.userId, response.data.token);
       if (response.status === 200) {
+        alert("Login Successfully!");
         navigation.navigate("DrawerNavigationRoutes");
         values.email = "";
         values.password = "";
@@ -42,7 +43,8 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log(error);
-      alert(error.response.data.message);
+      const message = error.response.data.message || "Something went wrong,Please try again!";
+      alert(message);
     }
   };
   return (

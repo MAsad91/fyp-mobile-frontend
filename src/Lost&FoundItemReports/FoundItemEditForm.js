@@ -7,13 +7,15 @@ import * as ImagePicker from "expo-image-picker";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
-import axios from "axios"; 
+import axios from "axios";
 
-const LostItemForm = () => {
+const FoundItemForm = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const route = useRoute();
-  const requestMethod = route.params;
+  
+  const requestId = route.params
+  console.log(requestId);
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -24,9 +26,9 @@ const LostItemForm = () => {
   const [state, setState] = useState("");
   const [stateError, setStateError] = useState(false);
   const [stateErrorMsg, setStateErrorMsg] = useState("");
-  const [lostItem, setLostItem] = useState("");
-  const [lostItemError, setLostItemError] = useState(false);
-  const [lostItemErrorMsg, setLostItemErrorMsg] = useState("");
+  const [foundItem, setFoundItem] = useState("");
+  const [foundItemError, setFoundItemError] = useState(false);
+  const [foundItemErrorMsg, setFoundItemErrorMsg] = useState("");
   const [color, setColor] = useState("");
   const [colorError, setColorError] = useState(false);
   const [colorErrorMsg, setColorErrorMsg] = useState("");
@@ -63,7 +65,7 @@ const LostItemForm = () => {
       name,
       itemName,
       state,
-      lostItem,
+      foundItem,
       color,
       location,
       details,
@@ -71,51 +73,55 @@ const LostItemForm = () => {
       image
     );
 
-    if (name === "" && name.length < 3) {
+    if (name.length > 0 && name.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (itemName === "" && itemName.length < 4) {
+    if (itemName.length > 0 && itemName.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state === "" && state.length < 3) {
+    if (state.length > 0 && state.length < 3) {
       setStateError(true);
       setStateErrorMsg("Item State must have 3 or more characters");
     }
-    if (color === "" && color.length < 3) {
+    if (color.length > 0 && color.length < 3) {
       setColorError(true);
       setColorErrorMsg("Item color must have 3 or more characters");
     }
-    if (location === "" && location.length < 4) {
+    if (location.length > 0 && location.length < 4) {
       setLocationError(true);
       setLocationErrorMsg("Location must have 4 or more characters");
     }
-    if (details === "" && details.length < 4) {
+    if (details.length > 0 && details.length < 4) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 4 or more characters");
     }
-    if (description === "" && description.length < 15) {
+    if (description.length > 0 && description.length < 15) {
       setDescriptionError(true);
       setDescriptionErrorMsg("Description must have 15 or more characters");
     }
-    if (lostItem == "lostItemtype" || lostItem == "" || lostItem.length === 0) {
-      setLostItemError(true);
-      setLostItemErrorMsg("Lost item type must be choose");
-      return;
-    }
+    // if (
+    //   foundItem == "founditemtype" ||
+    //   foundItem == "" ||
+    //   foundItem.length === 0
+    // ) {
+    //   setFoundItemError(true);
+    //   setFoundItemErrorMsg("Found item type must be choose");
+    //   return;
+    // }
     if (!image) {
       return;
     } else {
       try {
         const response = await axios({
-          method: "post",
-          url: `http://192.168.100.10:5000/lost-report/reportform`,
+          method: "patch",
+          url: `http://192.168.100.10:5000/found-report/reportform/${requestId}`,
           data: {
             name: name,
             itemname: itemName,
             state: state,
-            lostitemtype: lostItem,
+            founditemtype: foundItem,
             color: color,
             location: location,
             details: details,
@@ -130,16 +136,16 @@ const LostItemForm = () => {
         });
         console.log("Response---", response);
         if (response.status === 201) {
-          alert(`Lost Item Report is submitted successfully!`);
-          navigation.navigate("LostItems Reports");
+          alert(`Found Item Report is submitted successfully!`);
+          navigation.navigate("FoundItems Reports");
           setName("");
           setItemName("");
           setColor("");
-          setState("");
-          setLostItem("");
-          setDetails("");
+          setFoundItem("");
           setDescription("");
           setLocation("");
+          setDetails("");
+          setState("");
           setImage(null);
         }
       } catch (error) {
@@ -156,7 +162,7 @@ const LostItemForm = () => {
         placeholder="Enter Your Name"
         onChangeText={(name) => {
           setName(name);
-          if (name.length < 3) {
+          if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
           } else {
@@ -169,10 +175,10 @@ const LostItemForm = () => {
 
       <Label text="Item Name" />
       <Input
-        placeholder="Enter Lost Item Name"
+        placeholder="Enter Found Item Name"
         onChangeText={(itemName) => {
           setItemName(itemName);
-          if (itemName.length < 4) {
+          if (itemName.length > 0 && itemName.length < 4) {
             setItemNameError(true);
             setItemNameErrorMsg("Item Name must have 4 or more characters");
           } else {
@@ -188,7 +194,7 @@ const LostItemForm = () => {
         placeholder="Enter State of Item e.g(old/new)"
         onChangeText={(state) => {
           setState(state);
-          if (state.length < 3) {
+          if (state.length > 0 && state.length < 3) {
             setStateError(true);
             setStateErrorMsg("Item State must have 3 or more characters");
           } else {
@@ -199,27 +205,27 @@ const LostItemForm = () => {
         error={stateError ? <Text>{stateErrorMsg}</Text> : null}
       />
 
-      <Label text="Choose One Option" />
+      <Label text="Choose One option" />
       <View style={styles.pickerContainer}>
         <Picker
-          selectedValue={lostItem}
+          selectedValue={foundItem}
           onValueChange={(value) => {
-            setLostItem(value);
-            if (
-              lostItem === "lostItemtype" &&
-              lostItem === "" &&
-              lostItem.length === 0
-            ) {
-              setLostItemError(true);
-              setLostItemErrorMsg("Lost item type must be choose");
-            } else {
-              setLostItemError(false);
-            }
+            setFoundItem(value);
+            // if (
+            //   foundItem === "founditemtype" &&
+            //   foundItem === "" &&
+            //   foundItem.length === 0
+            // ) {
+            //   setFoundItemError(true);
+            //   setFoundItemErrorMsg("Found item type must be choose");
+            // } else {
+            //   setFoundItemError(false);
+            // }
           }}
           mode="dropdown"
           style={styles.picker}
         >
-          <Picker.Item label="Choose Lost Item Type" value="lostitemtype" />
+          <Picker.Item label="Choose Found Item Type" value="founditemtype" />
           <Picker.Item label="Electronic" value="electronic" />
           <Picker.Item label="Wallet" value="wallet" />
           <Picker.Item label="Documents" value="documents" />
@@ -230,8 +236,8 @@ const LostItemForm = () => {
           <Picker.Item label="Child Affairs" value="childaffairs" />
           <Picker.Item label="Others" value="Others" />
         </Picker>
-        {lostItemError ? (
-          <Text style={{ color: "red" }}>{lostItemErrorMsg}</Text>
+        {foundItemError ? (
+          <Text style={{ color: "red" }}>{foundItemErrorMsg}</Text>
         ) : null}
       </View>
 
@@ -240,7 +246,7 @@ const LostItemForm = () => {
         placeholder="Enter Item Color"
         onChangeText={(color) => {
           setColor(color);
-          if (color.length < 3) {
+          if (color.length > 0 && color.length < 3) {
             setColorError(true);
             setColorErrorMsg("Item color must have 3 or more characters");
           } else {
@@ -253,10 +259,10 @@ const LostItemForm = () => {
 
       <Label text="Location" />
       <Input
-        placeholder="Enter Lost Location"
+        placeholder="Enter Found Location"
         onChangeText={(location) => {
           setLocation(location);
-          if (location.length < 4) {
+          if (location.length > 0 && location.length < 4) {
             setLocationError(true);
             setLocationErrorMsg("Location must have 4 or more characters");
           } else {
@@ -272,7 +278,7 @@ const LostItemForm = () => {
         placeholder="Enter Details"
         onChangeText={(details) => {
           setDetails(details);
-          if (details.length < 4) {
+          if (details.length > 0 && details.length < 4) {
             setDetailsError(true);
             setDetailsErrorMsg("Details must have 4 or more characters");
           } else {
@@ -288,7 +294,7 @@ const LostItemForm = () => {
         placeholder="Enter Description"
         onChangeText={(description) => {
           setDescription(description);
-          if (description.length < 15) {
+          if (description.length > 0 && description.length < 15) {
             setDescriptionError(true);
             setDescriptionErrorMsg(
               "Description must have 15 or more characters"
@@ -304,7 +310,7 @@ const LostItemForm = () => {
       <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {!image && <Text style={styles.error}>Image must be choose</Text>}
+        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
@@ -340,4 +346,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LostItemForm;
+export default FoundItemForm;

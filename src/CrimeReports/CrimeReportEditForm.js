@@ -10,9 +10,9 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 
 const CrimeReportForm = () => {
-  // const route = useRoute();
-  // const requestMethod = route.params;
-  // console.log(requestMethod);
+  const route = useRoute();
+  const requestId = route.params;
+  console.log("id",requestId);
   
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
@@ -48,24 +48,24 @@ const CrimeReportForm = () => {
 
   const handleSubmit = async () => {
     console.log("Crime Type====", crimeType);
-    if (name === "" && name.length < 3) {
+    if ( name.length > 0 && name.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details === "" && details.length < 20) {
+    if ( details.length > 0 && details.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    if (location === "" && location.length < 3) {
+    if ( location.length > 0 && location.length < 3) {
       setError(true);
       setErrorMessage("Location must have 3 or more characters");
     }
 
-    if (crimeType == "crimetype" || crimeType == "" || crimeType.length === 0) {
-      setCrimeTypeError(true);
-      setCrimeTypeErrorMsg("Crime type must be choose");
-      return;
-    }
+    // if (crimeType == "crimetype" || crimeType == "" || crimeType.length > 0) {
+    //   setCrimeTypeError(false);
+    //   setCrimeTypeErrorMsg("Crime type must be choose");
+    //   return;
+    // }
     if (!image) {
       return;
     } else {
@@ -73,8 +73,8 @@ const CrimeReportForm = () => {
 
       try {
         const response = await axios({
-          method: "post",
-          url: `http://192.168.100.10:5000/crime-report/reportform`,
+          method: "patch",
+          url: `http://192.168.100.10:5000/crime-report/reportform/${requestId}`,
           data: {
             name: name,
             crimetype: crimeType,
@@ -89,7 +89,7 @@ const CrimeReportForm = () => {
           },
         });
         console.log("Response---", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           alert(`Crime Report is submitted Successfully!`);
           navigation.navigate("Crime Reports");
           setCrimeType("");
@@ -112,7 +112,7 @@ const CrimeReportForm = () => {
         placeholder="Enter Your Name"
         onChangeText={(name) => {
           setName(name);
-          if (name.length < 3) {
+          if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
           } else {
@@ -128,16 +128,16 @@ const CrimeReportForm = () => {
           selectedValue={crimeType}
           onValueChange={(value) => {
             setCrimeType(value);
-            if (
-              crimeType === "crimetype" &&
-              crimeType === "" &&
-              crimeType.length === 0
-            ) {
-              setCrimeTypeError(true);
-              setCrimeTypeErrorMsg("Crime type must be choose");
-            } else {
-              setCrimeTypeError(false);
-            }
+            // if (
+            //   crimeType === "crimetype" &&
+            //   crimeType === "" &&
+            //   crimeType.length === 0
+            // ) {
+            //   setCrimeTypeError(true);
+            //   setCrimeTypeErrorMsg("Crime type must be choose");
+            // } else {
+            //   setCrimeTypeError(false);
+            // }
           }}
           mode="dropdown"
           style={styles.picker}
@@ -153,9 +153,9 @@ const CrimeReportForm = () => {
           <Picker.Item label="Others" value="Others" />
         </Picker>
 
-        {crimeTypeError ? (
+        {/* {crimeTypeError ? (
           <Text style={{ color: "red" }}>{crimeTypeErrorMsg}</Text>
-        ) : null}
+        ) : null} */}
       </View>
 
       <Label text="Details" />
@@ -163,7 +163,7 @@ const CrimeReportForm = () => {
         placeholder="Enter Crime Details"
         onChangeText={(details) => {
           setDetails(details);
-          if (details.length < 20) {
+          if (details.length > 0 && details.length < 20) {
             setDetailsError(true);
             setDetailsErrorMsg("Details must have 20 or more characters");
           } else {
@@ -178,7 +178,7 @@ const CrimeReportForm = () => {
         placeholder="Enter Crime Location"
         onChangeText={(location) => {
           setLocation(location);
-          if (location.length < 3) {
+          if (location.length > 0 && location.length < 3) {
             setError(true);
             setErrorMessage("Location must have 3 or more characters");
           } else {
@@ -191,7 +191,7 @@ const CrimeReportForm = () => {
       <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {!image && <Text style={styles.error}>Image must be choose</Text>}
+        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />

@@ -1,52 +1,74 @@
 import React from "react";
-import { View, StyleSheet, Text, ScrollView,Dimensions,StatusBar  } from "react-native";
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-material-cards'
+import { useNavigation /*useParams*/ } from "@react-navigation/native";
+import hello from "../assets/success.png";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Dimensions,
+  StatusBar,
+  Modal,
+  Image
+} from "react-native";
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from "react-native-material-cards";
+import axios from "axios";
+const CrimeReportList = ({ id, crimetype, details, name, location, image }) => {
+  console.log(crimetype);
+  console.log(details);
+  console.log(id);
+  console.log(image);
+  const cardImage = image[0];
+  console.log(cardImage);
 
-const CrimeReportList = ({crimetype,details,image,id,name,location}) => {
- console.log(crimetype);
- console.log(details);
- console.log(id)
-//  console.log(title);
+  const navigation = useNavigation();
 
- 
+  const onDeleteUsers = async (id) => {
+    const response = await axios.delete(
+      `http://192.168.100.10:5000/crime-report/report/${id}`
+    );
+    if (response.status === 200) {
+      alert(response.status);
+    }
+  };
+
   return (
-      <View style={styles.list}>
-          <Card style={styles.cardStyle}>
-            <CardImage 
-              src = {{uri:image}}
-              title="crime image"
+    <View style={styles.list}>
+      <Card style={styles.cardStyle}>
+        <CardImage src={{uri: hello}} title="crime image" />
+        <CardTitle title={crimetype} subtitle={`Details: ${details}`} />
+        <CardContent />
+        <CardContent text={`Reporter Name: ${name}`} />
+        <CardContent text={`Location: ${location}`} />
 
-            />
-            <CardTitle 
-              title={crimetype} 
-              subtitle={`Details: ${details}`}
-              
-            />  
-            <CardContent />
-            <CardContent
-              text={`Reporter Name: ${name}`}
-            />
-            <CardContent
-              text={`Location: ${location}`}
-            />
-            
-            <CardAction 
-              separator={true} 
-              inColumn={false}>
-              <CardButton
-                onPress={() => {}}
-                title="Edit"
-                color="black"
-              />
-              <CardButton
-                onPress={() => {}}
-                title="Delete"
-                color="red"
-              />
-            </CardAction>
-          </Card>
+        <CardAction separator={true} inColumn={false}>
+          <CardButton
+            onPress={() => {
+              navigation.navigate("Main", {
+                screen: "CrimeReportEditForm",
+                params: id,
+              });
+            }}
+            title="Edit"
+            color="black"
+          />
+          <CardButton
+            onPress={(id) => {
+              onDeleteUsers(id);
+            }}
+            title="Delete"
+            color="red"
+          />
+        </CardAction>
+      </Card>
     </View>
-
   );
 };
 
@@ -57,10 +79,9 @@ const CrimeReportList = ({crimetype,details,image,id,name,location}) => {
 // console.log('ch', StatusBar.currentHeight);
 
 const styles = StyleSheet.create({
-
   list: {
-   flex:1,
-   flexDirection: "row",
+    flex: 1,
+    flexDirection: "row",
     justifyContent: "space-between",
     width: "90%",
     borderWidth: 1,
@@ -68,12 +89,12 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 5,
     borderBottomWidth: 10,
-    borderBottomColor:'black',
+    borderBottomColor: "black",
     backgroundColor: "snow",
     padding: 1,
     marginVertical: 12,
-    marginLeft:15,
-    marginTop:10
+    marginLeft: 15,
+    marginTop: 10,
   },
   title: {
     // color: "white",

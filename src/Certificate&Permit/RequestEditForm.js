@@ -1,18 +1,18 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/auth-context";
-import Button from "../components/Button";
 
 import Input from "../components/Input";
 import Label from "../components/Label";
+import Button from "../components/Button";
 import axios from "axios";
 
-const CommunityServicesForm = () => {
+const RequestForm = () => {
   const route = useRoute();
-  const requestMethod = route.params;
+  const requestId = route.params;
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
@@ -27,26 +27,27 @@ const CommunityServicesForm = () => {
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
 
   const handleSubmit = async () => {
-    if (name === "" && name.length < 3) {
+    if (name.length > 0 && name.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details === "" && details.length < 20) {
+    if (details.length > 0 && details.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    if (request == "servicetype" || request == "" || request.length === 0) {
-      setRequestError(true);
-      setRequestErrorMsg("Request type must be choose");
-      return;
-    } else {
+    // if (request == "requesttype" || request == "" || request.length === 0) {
+    //   setRequestError(true);
+    //   setRequestErrorMsg("Request type must be choose");
+    //   return;
+    // } 
+    else {
       try {
         const response = await axios({
-          method: "post",
-          url: `http://192.168.100.10:5000/request-communityservices/requestform`,
+          method: "patch",
+          url: `http://192.168.100.10:5000/request-certificatepermits/requestform/${requestId}`,
           data: {
             name: name,
-            servicetype: request,
+            requesttype: request,
             details: details,
             creator: auth.userId,
           },
@@ -57,10 +58,10 @@ const CommunityServicesForm = () => {
         console.log("Response--", response);
         if (response.status === 201) {
           alert(`Request Submitted Successfully!`);
-          navigation.navigate("Community Services");
+          navigation.navigate("Certificate & Permit");
           setName("");
-          setDetails("");
           setRequest("");
+          setDetails("");
         }
       } catch (error) {
         alert(error.response.data.message);
@@ -75,7 +76,7 @@ const CommunityServicesForm = () => {
         placeholder="Enter Name"
         onChangeText={(name) => {
           setName(name);
-          if (name.length < 3) {
+          if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
           } else {
@@ -92,37 +93,38 @@ const CommunityServicesForm = () => {
           selectedValue={request}
           onValueChange={(value) => {
             setRequest(value);
-            if (
-              request === "servicetype" &&
-              request === "" &&
-              request.length === 0
-            ) {
-              requestError(true);
-              requestErrorMsg("Request type must be choose");
-            } else {
-              requestError(false);
-            }
+            // if (
+            //   request === "requesttype" &&
+            //   request === "" &&
+            //   request.length === 0
+            // ) {
+            //   requestError(true);
+            //   requestErrorMsg("Request type must be choose");
+            // } else {
+            //   requestError(false);
+            // }
           }}
           mode="dropdown"
           style={styles.picker}
         >
-          <Picker.Item label="Choose Service Type" value="servicetype" />
-          <Picker.Item label="Home Security" value="homeSecurity" />
-          <Picker.Item label="Tourists Security" value="touristSecurity" />
-          <Picker.Item label="Events Security" value="eventsSecurity" />
-          <Picker.Item label="Others" value="others" />
+          <Picker.Item
+            label="Choose Certificate or Permit"
+            value="requesttype"
+          />
+          <Picker.Item label="Certificate" value="certificate" />
+          <Picker.Item label="Permit" value="permit" />
         </Picker>
         {requestError ? (
           <Text style={{ color: "red" }}>{requestErrorMsg}</Text>
         ) : null}
       </View>
 
-      <Label text="Details" />
+      <Label text="Details " />
       <Input
         placeholder="Enter details"
         onChangeText={(details) => {
           setDetails(details);
-          if (details.length < 20) {
+          if (details.length > 0 && details.length < 20) {
             setDetailsError(true);
             setDetailsErrorMsg("Details must have 20 or more characters");
           } else {
@@ -155,4 +157,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommunityServicesForm;
+export default RequestForm;

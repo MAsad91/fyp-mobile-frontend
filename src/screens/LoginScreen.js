@@ -20,6 +20,16 @@ const LoginScreen = () => {
           <Text style={styles.link}>SignUp</Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.row}>
+      <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ForgotPassword");
+          }}
+        >
+          <Text></Text>
+          <Text style={styles.link}>ForgotPassword?</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -43,6 +53,7 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: "bold",
   },
+  
 });
 
 export default LoginScreen;

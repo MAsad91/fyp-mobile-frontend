@@ -9,8 +9,10 @@ import Input from "./Input";
 import Label from "./Label";
 import Button from "./Button";
 import axios from "axios";
+import PhoneInput from "react-native-phone-number-input";
 
 const SignUpForm = () => {
+  // const [value, setValue] = useState("");
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const signUpSchema = yup.object().shape({
@@ -36,11 +38,11 @@ const SignUpForm = () => {
       .string()
       .min(10, "Address must contain atleast 10 characters")
       .required("Address is required"),
-    contactno: yup
-      .number()
-      .min(11, "Contact number must contain 11 digits")
-      // .max(11, "Contact number not be greater then 11 digits")
-      .required("Contact Number is required"),
+    // contactno: yup
+    //   .number()
+    //   .min(12, "Contact number must contain 12 digits")
+    //   // .max(11, "Contact number not be greater then 11 digits")
+    //   .required("Contact Number is required"),
   });
   const handleSubmit = async (values) => {
     console.log(values);
@@ -59,18 +61,23 @@ const SignUpForm = () => {
       });
 
       console.log("response---", response);
-      auth.login(response.data.userId, response.data.token);
-      if (response.status === 201) {
-        navigation.navigate("DrawerNavigationRoutes");
+      // auth.login(response.data.userId, response.data.token);
+      let msg = response.data.message;
+      alert("Email Verification ", msg);
+      navigation.navigate('EmailVerify');
+      const statusCode = response.status;
+      if (statusCode === 201) {
+        navigation.navigate("Login");
         values.name = "";
         values.password = "";
         values.email = "";
         values.address = "";
         values.contactno = "";
       }
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
+    } catch (err) {
+      const message = err.response.data.message || "Something went wrong,Please try again!";
+      console.log(err);
+      alert("SignUp Failed ",message);
     }
   };
   return (
@@ -143,13 +150,24 @@ const SignUpForm = () => {
           />
 
           <Label text="Contact-No" />
+          {/* <PhoneInput
+            // ref={phoneInput}
+            // defaultValue={value}
+            defaultCode="IN"
+            onChangeFormattedText={handleChange("contactno")}
+            value={values.contactno}
+            error={touched.contactno && errors.contactno}
+            withDarkTheme
+            withShadow
+            autoFocus
+          /> */}
           <Input
-            keyboardType="number-pad"
-            placeholder="Enter Contact No e.g (03151234567)"
+            keyboardType="phone-pad"
+            placeholder="Enter Contact No e.g (0315-1234567)"
             onChangeText={handleChange("contactno")}
             onBlur={handleBlur("contactno")}
             value={values.contactno}
-            error={touched.contactno && errors.contactno}
+            // error={touched.contactno && errors.contactno}
           />
           <Button title="Register" onPress={handleSubmit} />
         </ScrollView>

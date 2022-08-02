@@ -9,7 +9,7 @@ import {
   CardButton,
   CardImage,
 } from "react-native-material-cards";
-
+import axios from "axios";
 const ServicesList = ({ id, name, servicetype, details }) => {
   const navigation = useNavigation();
 
@@ -18,13 +18,13 @@ const ServicesList = ({ id, name, servicetype, details }) => {
       `http://192.168.100.10:5000/request-communityservices/report/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      alert("Deleted successfully!",response.status);
     }
   };
 
   return (
     <View style={styles.list}>
-      <Card style={styles.cardStyle}>
+      <Card key={id} style={styles.cardStyle}>
         <CardTitle title={servicetype} subtitle={`\nDetails: ${details}`} />
         <CardContent />
         <CardAction separator={true} />
@@ -32,7 +32,7 @@ const ServicesList = ({ id, name, servicetype, details }) => {
 
         <CardAction separator={true} inColumn={false}>
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               navigation.navigate("Main", {
                 screen: "ServicesEditForm",
                 params: id,
@@ -42,7 +42,7 @@ const ServicesList = ({ id, name, servicetype, details }) => {
             color="black"
           />
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               onDeleteUsers(id);
             }}
             title="Delete"

@@ -1,22 +1,31 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from "react-native-material-cards";
+import axios from "axios";
 
-const CertificatePermitList = ({ id, name, certificatetype, details }) => {
+const CertificatePermitList = ({ id, certificatetype, details, name }) => {
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
-      `http://192.168.100.10:5000/request-certificatepermits/report/${id}`
+      `http://192.168.100.10:5000/request-certificatepermits/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      alert("Deleted successfully!",response.status);
     }
   };
 
   return (
     <View style={styles.list}>
-      <Card style={styles.cardStyle}>
+      <Card key={id} style={styles.cardStyle}>
         <CardTitle title={certificatetype} subtitle={`\nDetails: ${details}`} />
         <CardContent />
         <CardAction separator={true} />
@@ -24,7 +33,7 @@ const CertificatePermitList = ({ id, name, certificatetype, details }) => {
 
         <CardAction separator={true} inColumn={false}>
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               navigation.navigate("Main", {
                 screen: "Certificate&PermitEdit",
                 params: id,
@@ -34,7 +43,7 @@ const CertificatePermitList = ({ id, name, certificatetype, details }) => {
             color="black"
           />
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               onDeleteUsers(id);
             }}
             title="Delete"

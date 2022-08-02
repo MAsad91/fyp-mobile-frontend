@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/auth-context";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import {
   Card,
@@ -9,28 +10,36 @@ import {
   CardButton,
   CardImage,
 } from "react-native-material-cards";
-
+import axios from "axios";
 const SafeLifeReports = ({
+  id,
   reporttype,
   details,
-  image,
-  id,
   name,
   location,
+  image,
 }) => {
+  const auth = useContext(AuthContext);
   const onDeleteUsers = async (id) => {
+    // const creator = auth.userId;
+    // const response = await axios({
+    //   method: "delete",
+    //   url: `http://192.168.100.10:5000/safelife-report/${id}`,
+    //   data: { creator },
+    //   headers: { Authorization: "Bearer " + auth.token },
+    // });
     const response = await axios.delete(
       `http://192.168.100.10:5000/safelife-report/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      alert("Deleted successfully!",response.status);
     }
   };
 
   const navigation = useNavigation();
   return (
     <View style={styles.list}>
-      <Card style={styles.cardStyle}>
+      <Card key={id} style={styles.cardStyle}>
         <CardImage src={{ uri: image }} title="safelife image" />
         <CardTitle title={reporttype} subtitle={`Details: ${details}`} />
         <CardContent />
@@ -40,9 +49,9 @@ const SafeLifeReports = ({
         <CardAction separator={true} inColumn={false}>
           <CardButton
             style={styles.editbutton}
-            onPress={(id) => {
+            onPress={() => {
               navigation.navigate("Main", {
-                screen: "SafelifeForm",
+                screen: "SafelifeEditForm",
                 params: id,
               });
             }}
@@ -50,7 +59,7 @@ const SafeLifeReports = ({
             color="black"
           />
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               onDeleteUsers(id);
             }}
             title="Delete"

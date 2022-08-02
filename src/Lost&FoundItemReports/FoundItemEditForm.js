@@ -14,8 +14,17 @@ const FoundItemForm = () => {
   const navigation = useNavigation();
   const route = useRoute();
   
-  const requestId = route.params
-  console.log(requestId);
+  const request = route.params;
+  let arrayData=[] ;
+  for (const value in request) {
+    arrayData.push(request[value]);
+    console.log(`key=${value}: ${request[value]}`);
+    
+  }
+  console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  console.log(request);
+  console.log("id",requestId);
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -44,21 +53,21 @@ const FoundItemForm = () => {
   const [image, setImage] = useState(null);
 
   //Pick image from gallery
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    console.log("Result---", result);
+  //   console.log("Result---", result);
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     console.log(
@@ -110,9 +119,9 @@ const FoundItemForm = () => {
     //   setFoundItemErrorMsg("Found item type must be choose");
     //   return;
     // }
-    if (!image) {
-      return;
-    } else {
+    // if (!image) {
+    //   return;
+    // } else {
       try {
         const response = await axios({
           method: "patch",
@@ -126,16 +135,16 @@ const FoundItemForm = () => {
             location: location,
             details: details,
             description: description,
-            images: image,
-            creator: auth.userId,
+            // images: image,
+            // creator: auth.userId,
           },
           headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + auth.token,
+            // "Content-Type": "multipart/form-data",
+            // Authorization: "Bearer " + auth.token,
           },
         });
         console.log("Response---", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           alert(`Found Item Report is submitted successfully!`);
           navigation.navigate("FoundItems Reports");
           setName("");
@@ -146,13 +155,13 @@ const FoundItemForm = () => {
           setLocation("");
           setDetails("");
           setState("");
-          setImage(null);
+          // setImage(null);
         }
       } catch (error) {
         console.log(error.response.data.message);
         alert(error.response.data.message);
       }
-    }
+    // }
   };
 
   return (
@@ -236,9 +245,9 @@ const FoundItemForm = () => {
           <Picker.Item label="Child Affairs" value="childaffairs" />
           <Picker.Item label="Others" value="Others" />
         </Picker>
-        {foundItemError ? (
+        {/* {foundItemError ? (
           <Text style={{ color: "red" }}>{foundItemErrorMsg}</Text>
-        ) : null}
+        ) : null} */}
       </View>
 
       <Label text="Item Color" />
@@ -307,11 +316,11 @@ const FoundItemForm = () => {
         error={descriptionError ? <Text>{descriptionErrorMsg}</Text> : null}
       />
 
-      <View>
+      {/* <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
-      </View>
+        {!image && <Text style={styles.error}>Image must be choose</Text>}
+      </View> */}
 
       <Button title="Submit" onPress={handleSubmit} />
     </ScrollView>

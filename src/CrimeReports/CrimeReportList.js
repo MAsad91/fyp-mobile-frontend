@@ -20,29 +20,34 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
-const CrimeReportList = ({ id, crimetype, details, name, location, image }) => {
+const CrimeReportList = ({ key, id, crimetype, details, name, location, image }) => {
   console.log(crimetype);
   console.log(details);
   console.log(id);
-  console.log(image);
+  console.log("imagecard",image);
   const cardImage = image[0];
+  console.log("carImage====>", cardImage)
   console.log(cardImage);
 
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
+    console.log("id",id);
+    
     const response = await axios.delete(
-      `http://192.168.100.10:5000/crime-report/report/${id}`
+      `http://192.168.100.10:5000/crime-report/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      console.log("userDeleted======>")
+      alert("Deleted successfully",response.status);
     }
   };
 
   return (
     <View style={styles.list}>
-      <Card style={styles.cardStyle}>
-        <CardImage src={{uri: hello}} title="crime image" />
+      <Card  key={key} style={styles.cardStyle}>
+        {/* <Image source={{uri:`${cardImage}`}} alt='crime Image'/> */}
+        <CardImage source={{uri: image[0]}} title="crime image" />
         <CardTitle title={crimetype} subtitle={`Details: ${details}`} />
         <CardContent />
         <CardContent text={`Reporter Name: ${name}`} />
@@ -60,7 +65,7 @@ const CrimeReportList = ({ id, crimetype, details, name, location, image }) => {
             color="black"
           />
           <CardButton
-            onPress={(id) => {
+            onPress={() => {
               onDeleteUsers(id);
             }}
             title="Delete"

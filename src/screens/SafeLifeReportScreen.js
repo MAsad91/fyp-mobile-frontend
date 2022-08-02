@@ -32,7 +32,8 @@ const SafeLifeReportScreen = () => {
         {safeLifeReport.map((user) => {
           return(
             <SafeLifeReports 
-              key={user._id}
+              // key={user._id}
+              id={user._id}
               reporttype={user.reporttype}
               details={user.details}
               name={user.name}

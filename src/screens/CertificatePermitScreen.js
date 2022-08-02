@@ -30,12 +30,14 @@ const CertificatePermitScreen = () => {
     <View style={styles.container}>
       <ScrollView style={styles.scrollview}>
         {requestList.map((user)=> {
-          <CertificatePermitList 
+          return(
+            <CertificatePermitList 
             id={user._id}
-            certificatetype={user.certificatetype}
-            details={user.detail}
+            certificatetype={user.requesttype}
+            details={user.details}
             name={user.name}
           />
+          );
         })
         }
         

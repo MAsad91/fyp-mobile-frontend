@@ -32,7 +32,7 @@ const CommunityServicesScreen = () => {
         {servicesList.map((user) => {
           return(
             <ServicesList 
-              id={user._id}
+              id = {user._id}
               name={user.name}
               servicetype={user.servicetype}
               details={user.details}

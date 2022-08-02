@@ -9,6 +9,7 @@ import {
   CardButton,
   CardImage,
 } from "react-native-material-cards";
+import axios from "axios";
 import { AuthContext } from "../context/auth-context";
 const FoundItemReport = ({
   creator,
@@ -23,22 +24,24 @@ const FoundItemReport = ({
   location,
   image,
 }) => {
+  console.log(id);
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
+    
     const response = await axios.delete(
-      `http://192.168.100.10:5000/found-report/report/${id}`
+      `http://192.168.100.10:5000/found-report/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      alert("Deleted successfully!",response.status);
     }
   };
 
   return (
     <View style={styles.list}>
       {auth.userId === creator && (
-        <Card style={styles.cardStyle}>
+        <Card key={id} style={styles.cardStyle}>
           <CardImage src={{ uri: image }} title="Lost Item image" />
           <CardTitle
             title={founditemtype}
@@ -67,7 +70,7 @@ const FoundItemReport = ({
           </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
-              onPress={(id) => {
+              onPress={() => {
                 navigation.navigate("Main", {
                   screen: "FoundItemEditForm",
                   params: id,
@@ -77,7 +80,7 @@ const FoundItemReport = ({
               color="black"
             />
             <CardButton
-              onPress={(id) => {
+              onPress={() => {
                 onDeleteUsers(id);
               }}
               title="Delete"
@@ -87,7 +90,7 @@ const FoundItemReport = ({
         </Card>
       )}
       {!(auth.userId === creator) && (
-        <Card style={styles.cardStyle}>
+        <Card key={id} style={styles.cardStyle}>
           <CardImage src={{ uri: image }} title="Lost Item image" />
           <CardTitle
             title={founditemtype}

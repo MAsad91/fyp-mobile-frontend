@@ -12,7 +12,17 @@ import axios from "axios";
 
 const CommunityServicesForm = () => {
   const route = useRoute();
-  const requestId = route.params;
+  const dataRequest = route.params;
+  let arrayData=[] ;
+  for (const value in dataRequest) {
+    arrayData.push(dataRequest[value]);
+    console.log(`key=${value}: ${dataRequest[value]}`);
+    
+  }
+  console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  console.log(dataRequest);
+  console.log("id",requestId);
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
@@ -40,7 +50,7 @@ const CommunityServicesForm = () => {
     //   setRequestErrorMsg("Request type must be choose");
     //   return;
     // } 
-    else {
+    // else {
       try {
         const response = await axios({
           method: "patch",
@@ -49,14 +59,14 @@ const CommunityServicesForm = () => {
             name: name,
             servicetype: request,
             details: details,
-            creator: auth.userId,
+            // creator: auth.userId,
           },
           headers: {
-            Authorization: "Bearer " + auth.token,
+            // Authorization: "Bearer " + auth.token,
           },
         });
         console.log("Response--", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           alert(`Request Submitted Successfully!`);
           navigation.navigate("Community Services");
           setName("");
@@ -66,7 +76,7 @@ const CommunityServicesForm = () => {
       } catch (error) {
         alert(error.response.data.message);
       }
-    }
+    // }
   };
 
   return (
@@ -113,9 +123,9 @@ const CommunityServicesForm = () => {
           <Picker.Item label="Events Security" value="eventsSecurity" />
           <Picker.Item label="Others" value="others" />
         </Picker>
-        {requestError ? (
+        {/* {requestError ? (
           <Text style={{ color: "red" }}>{requestErrorMsg}</Text>
-        ) : null}
+        ) : null} */}
       </View>
 
       <Label text="Details" />

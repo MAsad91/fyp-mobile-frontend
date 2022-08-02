@@ -10,11 +10,21 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 
 const CrimeReportForm = () => {
+  
   const route = useRoute();
-  const requestId = route.params;
+  const request = route.params;
+  let arrayData=[] ;
+  for (const value in request) {
+    arrayData.push(request[value]);
+    console.log(`key=${value}: ${request[value]}`);
+    
+  }
+  console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  console.log(request);
   console.log("id",requestId);
   
-  const auth = useContext(AuthContext);
+  // const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
@@ -31,20 +41,20 @@ const CrimeReportForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   //Pick image from gallery
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    console.log("Result---", result);
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
+  //   console.log("Result---", result);
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     console.log("Crime Type====", crimeType);
@@ -66,9 +76,9 @@ const CrimeReportForm = () => {
     //   setCrimeTypeErrorMsg("Crime type must be choose");
     //   return;
     // }
-    if (!image) {
-      return;
-    } else {
+    // if (!image) {
+    //   return;
+    // } else {
       console.log("Name===", name, crimeType, details, location, image);
 
       try {
@@ -80,12 +90,12 @@ const CrimeReportForm = () => {
             crimetype: crimeType,
             details: details,
             location: location,
-            images: image,
-            creator: auth.userId,
+            // images: image,
+            // creator: auth.userId,
           },
           headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + auth.token,
+            // "Content-Type": "multipart/form-data",
+            // Authorization: "Bearer " + auth.token,
           },
         });
         console.log("Response---", response);
@@ -93,7 +103,7 @@ const CrimeReportForm = () => {
           alert(`Crime Report is submitted Successfully!`);
           navigation.navigate("Crime Reports");
           setCrimeType("");
-          setImage(null);
+          // setImage(null);
           setName("");
           setDetails("");
           setLocation("");
@@ -102,7 +112,8 @@ const CrimeReportForm = () => {
         console.log(error.response.data.message);
         alert(error.response.data.message);
       }
-    }
+    // }
+    console.log("Crime Type====", crimeType);
   };
 
   return (
@@ -188,11 +199,11 @@ const CrimeReportForm = () => {
         value={location}
         error={error === true ? <Text>{errorMessage}</Text> : null}
       />
-      <View>
+      {/* <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
-      </View>
+        {!image && <Text style={styles.error}>Image must be choose</Text>}
+      </View> */}
 
       <Button title="Submit" onPress={handleSubmit} />
     </ScrollView>

@@ -11,7 +11,16 @@ import Button from "../components/Button";
 
 const SafeLifeReportForm = () => {
   const route = useRoute();
-  const requestId = route.params; 
+  const request = route.params; 
+  let arrayData = [];
+  for (const value in request) {
+    arrayData.push(request[value]);
+    console.log(`key=${value}: ${request[value]}`);
+    
+  }
+  console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  console.log(request);
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
@@ -30,21 +39,21 @@ const SafeLifeReportForm = () => {
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
 
   //Pick image from gallery
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
 
-    console.log("Result---", result);
+  //   console.log("Result---", result);
 
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
+  //   if (!result.cancelled) {
+  //     setImage(result.uri);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     console.log(name, reportType, details, location, image);
@@ -69,9 +78,9 @@ const SafeLifeReportForm = () => {
     //   setReportTypeErrorMsg("Report type must be choose");
     //   return;
     // }
-    if (!image) {
-      return;
-    } else {
+    // if (!image) {
+    //   return;
+    // } else {
       try {
         const response = await axios({
           method: "patch",
@@ -81,29 +90,29 @@ const SafeLifeReportForm = () => {
             reporttype: reportType,
             details: details,
             location: location,
-            images: image,
-            creator: auth.userId,
+            // images: image,
+            // creator: auth.userId,
           },
           headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + auth.token,
+            // "Content-Type": "multipart/form-data",
+            // Authorization: "Bearer " + auth.token,
           },
         });
         console.log("Response---", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           alert(`SafeLife Report is submitted Successfully!`);
           navigation.navigate("SafeLife Reports");
           setName("");
           setDetails("");
           setLocation("");
-          setImage(null);
+          // setImage(null);
           setReportType("");
         }
       } catch (error) {
         console.log(error.response.data.message);
         alert(error.response.data.message);
       }
-    }
+    // }
   };
 
   return (
@@ -153,9 +162,9 @@ const SafeLifeReportForm = () => {
           <Picker.Item label="Help" value="help" />
           <Picker.Item label="Others" value="Others" />
         </Picker>
-        {reportTypeError ? (
+        {/* {reportTypeError ? (
           <Text style={{ color: "red" }}>{reportTypeErrorMsg}</Text>
-        ) : null}
+        ) : null} */}
       </View>
 
       <Label text="Incident Details" />
@@ -190,11 +199,11 @@ const SafeLifeReportForm = () => {
         error={locationError ? <Text>{locationErrorMsg}</Text> : null}
       />
 
-      <View>
+      {/* <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {/* {!image && <Text style={styles.error}>Image must be choose</Text>} */}
-      </View>
+        {!image && <Text style={styles.error}>Image must be choose</Text>}
+      </View> */}
 
       <Button title="Submit" onPress={handleSubmit} />
     </ScrollView>

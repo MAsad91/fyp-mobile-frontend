@@ -10,7 +10,7 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import { AuthContext } from "../context/auth-context";
-
+import axios from "axios";
 const LostItemReport = ({
   creator,
   id,
@@ -24,24 +24,25 @@ const LostItemReport = ({
   location,
   image,
 }) => {
-  console.log(creator);
+  // console.log(creator);
   const auth = useContext(AuthContext);
-  console.log(auth.userId);
+  // console.log(auth.userId);
+  console.log(id);
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
-      `http://192.168.100.10:5000/lost-report/report/${id}`
+      `http://192.168.100.10:5000/lost-report/${id}`
     );
     if (response.status === 200) {
-      alert(response.status);
+      alert("Deleted successfully!",response.status);
     }
   };
 
   return (
     <View style={styles.list}>
       {(auth.userId === creator) && (
-        <Card style={styles.cardStyle}>
+        <Card key={id} style={styles.cardStyle}>
           <CardImage src={{ uri: image }} title="Lost Item image" />
           <CardTitle
             title={lostitemtype}
@@ -70,7 +71,7 @@ const LostItemReport = ({
           </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
-              onPress={(id) => {
+              onPress={() => {
                 navigation.navigate("Main", {
                   screen: "LostItemEditForm",
                   params: id,
@@ -80,7 +81,7 @@ const LostItemReport = ({
               color="black"
             />
             <CardButton
-              onPress={(id) => {
+              onPress={() => {
                 onDeleteUsers(id);
               }}
               title="Delete"
@@ -90,7 +91,7 @@ const LostItemReport = ({
         </Card>
       )}
       {!(auth.userId === creator) && (
-        <Card style={styles.cardStyle}>
+        <Card key={id} style={styles.cardStyle}>
           <CardImage src={{ uri: image }} title="crime image" />
           <CardTitle
             title={lostitemtype}

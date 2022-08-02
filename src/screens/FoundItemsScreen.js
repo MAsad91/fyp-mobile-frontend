@@ -33,7 +33,7 @@ const FoundItemsScreen = () => {
           return(
             <FoundItemReport 
               creator={user.creator}
-              id={user._id}
+              id = {user._id}
               founditemtype = {user.founditemtype}
               details = {user.details}
               description={user.description}

@@ -34,18 +34,23 @@ const CrimeReportsScreen = () => {
       <ScrollView style={styles.scrollview}>
         
         {crimeReport.map((user) => {
+          console.log("user",user);
           return(
             <CrimeReportList 
+              key={user.id}
               id={user._id}
               crimetype = {user.crimetype}
               details = {user.details}
               name = {user.name}
               location = {user.location}
               image = {user.images.map((img) => {
-                return "http://192.168.100.10:5000/" + img;
+                return "https://safecityservices.herokuapp.com/" + img;
               })}
+              
+
           />
           );
+
         })}
         
     </ScrollView>

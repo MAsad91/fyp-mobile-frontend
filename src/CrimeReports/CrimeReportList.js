@@ -1,6 +1,6 @@
 import React from "react";
+
 import { useNavigation /*useParams*/ } from "@react-navigation/native";
-import hello from "../assets/success.png";
 import {
   View,
   StyleSheet,
@@ -21,6 +21,7 @@ import {
 } from "react-native-material-cards";
 import axios from "axios";
 const CrimeReportList = ({ key, id, crimetype, details, name, location, image }) => {
+ 
   console.log(crimetype);
   console.log(details);
   console.log(id);
@@ -30,6 +31,8 @@ const CrimeReportList = ({ key, id, crimetype, details, name, location, image })
   console.log(cardImage);
 
   const navigation = useNavigation();
+
+
 
   const onDeleteUsers = async (id) => {
     console.log("id",id);
@@ -44,10 +47,10 @@ const CrimeReportList = ({ key, id, crimetype, details, name, location, image })
   };
 
   return (
+
     <View style={styles.list}>
       <Card  key={key} style={styles.cardStyle}>
-        {/* <Image source={{uri:`${cardImage}`}} alt='crime Image'/> */}
-        <CardImage source={{uri: image[0]}} title="crime image" />
+        <CardImage source={{ uri: cardImage }} title="crime image" />
         <CardTitle title={crimetype} subtitle={`Details: ${details}`} />
         <CardContent />
         <CardContent text={`Reporter Name: ${name}`} />

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import { API_URL } from "../config";
 import AddButton from "../components/AddButton";
 import ServicesList from "../CommunityServices/ServicesList";
 
@@ -10,12 +11,24 @@ const CommunityServicesScreen = () => {
   const navigation = useNavigation();
   const auth = useContext(AuthContext);
   const [servicesList, setServicesList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setRender(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     const fetchServicesReport = async () => {
       try {
         const { data } = await axios.get(
-          `http://192.168.100.10:5000/request-communityservices/${auth.userId}`
+          `${API_URL.localhost}/request-communityservices/${auth.userId}`
         );
         setServicesList(data);
         console.log("Data---: ", data);
@@ -25,29 +38,34 @@ const CommunityServicesScreen = () => {
       }
     };
     fetchServicesReport();
-  }, []);
+  }, [render]);
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollview}>
+      <ScrollView
+        style={styles.scrollview}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {servicesList.map((user) => {
-          return(
-            <ServicesList 
-              id = {user._id}
+          return (
+            <ServicesList
+              id={user._id}
               name={user.name}
               servicetype={user.servicetype}
               details={user.details}
-
             />
-          )
-        })
-        }
+          );
+        })}
       </ScrollView>
-      
-      
+
       <View style={styles.addbutton}>
         <AddButton
           onPress={() => {
-            navigation.navigate("Main", { screen: "CommunityServicesForm", params:"post", });
+            navigation.navigate("Main", {
+              screen: "CommunityServicesForm",
+              params: "post",
+            });
           }}
         />
       </View>
@@ -60,16 +78,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addbutton: {
-    width:'100%',
-    height:60,
-    backgroundColor:'white'
+    width: "100%",
+    height: 60,
+    backgroundColor: "white",
   },
   scrollview: {
     // backgroundColor: 'green',
   },
   cards: {
     // backgroundColor:'red',
-  }
+  },
 });
 
 export default CommunityServicesScreen;

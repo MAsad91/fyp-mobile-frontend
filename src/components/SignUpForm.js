@@ -3,16 +3,18 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as yup from "yup";
+import "yup-phone";
 import { AuthContext } from "../context/auth-context";
 
 import Input from "./Input";
 import Label from "./Label";
 import Button from "./Button";
 import axios from "axios";
-import PhoneInput from "react-native-phone-number-input";
+import { API_URL } from "../config";
 
 const SignUpForm = () => {
   // const [value, setValue] = useState("");
+  let regex = /[0]{1}[3]{1}[0-9]{2}-[0-9]{7}/gm;
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const signUpSchema = yup.object().shape({
@@ -38,11 +40,13 @@ const SignUpForm = () => {
       .string()
       .min(10, "Address must contain atleast 10 characters")
       .required("Address is required"),
-    // contactno: yup
-    //   .number()
-    //   .min(12, "Contact number must contain 12 digits")
-    //   // .max(11, "Contact number not be greater then 11 digits")
-    //   .required("Contact Number is required"),
+    contactno: yup
+      .string()
+      // .phone(null, true, "Contact No is not valid")
+      .matches(regex, "Contact No is not valid")
+      .required("Contact Number is required")
+      .min(12, "Contact number must contain 12 digits")
+      .max(12, "Contact number not be greater then 12 digits"),
   });
   const handleSubmit = async (values) => {
     console.log(values);
@@ -50,7 +54,7 @@ const SignUpForm = () => {
     try {
       const response = await axios({
         method: "post",
-        url: `http://192.168.100.10:5000/auth/signup`,
+        url: `${API_URL.localhost}/auth/signup`,
         data: {
           name: values.name,
           email: values.email,
@@ -63,8 +67,8 @@ const SignUpForm = () => {
       console.log("response---", response);
       // auth.login(response.data.userId, response.data.token);
       let msg = response.data.message;
-      alert("Email Verification ", msg);
-      navigation.navigate('EmailVerify');
+      alert(msg);
+      // navigation.navigate("EmailVerify");
       const statusCode = response.status;
       if (statusCode === 201) {
         navigation.navigate("Login");
@@ -75,9 +79,10 @@ const SignUpForm = () => {
         values.contactno = "";
       }
     } catch (err) {
-      const message = err.response.data.message || "Something went wrong,Please try again!";
+      const message =
+        err.response.data.message || "Something went wrong,Please try again!";
       console.log(err);
-      alert("SignUp Failed ",message);
+      alert("SignUp Failed ", message);
     }
   };
   return (
@@ -150,24 +155,13 @@ const SignUpForm = () => {
           />
 
           <Label text="Contact-No" />
-          {/* <PhoneInput
-            // ref={phoneInput}
-            // defaultValue={value}
-            defaultCode="IN"
-            onChangeFormattedText={handleChange("contactno")}
-            value={values.contactno}
-            error={touched.contactno && errors.contactno}
-            withDarkTheme
-            withShadow
-            autoFocus
-          /> */}
           <Input
             keyboardType="phone-pad"
             placeholder="Enter Contact No e.g (0315-1234567)"
             onChangeText={handleChange("contactno")}
             onBlur={handleBlur("contactno")}
             value={values.contactno}
-            // error={touched.contactno && errors.contactno}
+            error={touched.contactno && errors.contactno}
           />
           <Button title="Register" onPress={handleSubmit} />
         </ScrollView>

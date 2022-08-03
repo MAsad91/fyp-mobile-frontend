@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Card, CardTitle, CardContent } from 'react-native-material-cards';
 
-const StatsList = ({ title, description, count }) => {
+const StatsList = ({ key, title, description, count }) => {
   return (
     <View style={styles.list}>
-      <Card>
+      <Card key={key}>
         <CardTitle 
           title={title} 
           subtitle={description}

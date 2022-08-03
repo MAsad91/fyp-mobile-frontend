@@ -11,6 +11,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { AuthContext } from "../context/auth-context";
 import ResetPasswordForm from "./ResetPasswordForm";
+import { API_URL } from "../config";
 
 import Input from "./Input";
 import Label from "./Label";
@@ -19,6 +20,7 @@ import axios from "axios";
 
 const ForgotPassword = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
   const [showForm, setShowForm] = useState(true);
   const signUpSchema = yup.object().shape({
     email: yup.string().email().required("Email is required!"),
@@ -27,21 +29,20 @@ const ForgotPassword = () => {
     console.log(values);
 
     try {
+      setEmail(values.email);
       const response = await axios({
         method: "post",
-        url: `http://192.168.100.10:5000/auth/emailsend`,
+        url: `${API_URL.localhost}/auth/emailsend`,
         data: {
           email: values.email,
         },
       });
 
       console.log("response---", response);
-      //   auth.login(response.data.userId, response.data.token);
-      if (response.status === 201) {
-        // navigation.navigate("settings");
+      if (response.status === 200) {
+
         alert("OTP Send Successfully!");
         setShowForm(false);
-        // values.password = "";
       }
     } catch (error) {
       console.log(error);
@@ -52,7 +53,7 @@ const ForgotPassword = () => {
   };
   return (
     <View>
-        {showForm && (
+        {showForm ? (
             <Formik
             validationSchema={signUpSchema}
             initialValues={{
@@ -81,9 +82,6 @@ const ForgotPassword = () => {
                   error={touched.email && errors.email}
                 />
                 <Button title="Send OTP" onPress={handleSubmit} />
-                {/* <View style={{ display: "flex", gap: "0.3rem" }}>
-                
-              </View> */}
                 <View style={styles.row}>
                   <Text>Not a member?</Text>
                   <TouchableOpacity
@@ -97,8 +95,7 @@ const ForgotPassword = () => {
               </ScrollView>
             )}
           </Formik>
-        )}
-        {!showForm && (
+        ) : (
             <ResetPasswordForm email={email}/>
         )}
       

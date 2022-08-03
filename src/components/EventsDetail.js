@@ -7,7 +7,7 @@ const EventsDetail = ({id,details,eventtype,location,name,image}) => {
 
   return (
     <View style={styles.list}>
-          <Card style={styles.cardStyle}>
+          <Card key={id} style={styles.cardStyle}>
             <CardImage 
               src = {{uri:image}}
               title="crime image"

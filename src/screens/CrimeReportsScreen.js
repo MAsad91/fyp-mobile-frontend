@@ -1,21 +1,35 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState }  from "react";
-import { View, StyleSheet,Text, ScrollView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { RefreshControl } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import AddButton from "../components/AddButton";
 import CrimeReportList from "../CrimeReports/CrimeReportList";
+import { API_URL } from "../config";
 
 const CrimeReportsScreen = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [crimeReport, setCrimeReport] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setRender(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     const fetchCrimeReports = async () => {
       try {
         const { data } = await axios.get(
-          `http://192.168.100.10:5000/crime-report/${auth.userId}`
+          `${API_URL.localhost}/crime-report/${auth.userId}`
         );
         setCrimeReport(data);
         console.log("Data---: ", data);
@@ -25,43 +39,46 @@ const CrimeReportsScreen = () => {
       }
     };
     fetchCrimeReports();
-  }, []);
+  }, [render]);
 
-  
   return (
     <View style={styles.container}>
-        
-      <ScrollView style={styles.scrollview}>
-        
+      <ScrollView
+        style={styles.scrollview}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {crimeReport.map((user) => {
-          console.log("user",user);
-          return(
-            <CrimeReportList 
-              key={user.id}
+          console.log("user", user);
+          return (
+            <CrimeReportList
+              key={user._id}
               id={user._id}
-              crimetype = {user.crimetype}
-              details = {user.details}
-              name = {user.name}
-              location = {user.location}
-              image = {user.images.map((img) => {
-                return "https://safecityservices.herokuapp.com/" + img;
+              crimetype={user.crimetype}
+              details={user.details}
+              name={user.name}
+              location={user.location}
+              image={user.images.map((img) => {
+                console.log(`IMG:::::${img}`);
+                // return `${API_URL.localhost}/` + img;
+                return `https://safecityservices.herokuapp.com/` + img;
               })}
-              
-
-          />
+            />
           );
-
         })}
-        
-    </ScrollView>
-    <View style={styles.addbutton}>
-      <AddButton
-            onPress={() => {
-              navigation.navigate("Main", { screen: "CrimeReportForm" , params:"post",});
-            }}
-          />
+      </ScrollView>
+      <View style={styles.addbutton}>
+        <AddButton
+          onPress={() => {
+            navigation.navigate("Main", {
+              screen: "CrimeReportForm",
+              params: "post",
+            });
+          }}
+        />
+      </View>
     </View>
-  </View>
   );
 };
 
@@ -69,19 +86,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor:"white"
-    
   },
   addbutton: {
-    width:'100%',
-    height:60,
-    backgroundColor:'white'
+    width: "100%",
+    height: 60,
+    backgroundColor: "white",
   },
   scrollview: {
     // backgroundColor: 'green',
   },
   cards: {
     // backgroundColor:'red',
-  }
+  },
 });
 
 export default CrimeReportsScreen;

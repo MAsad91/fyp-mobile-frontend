@@ -19,6 +19,7 @@ const SafeLifeReports = ({
   location,
   image,
 }) => {
+  const cardImage = image[0];
   const auth = useContext(AuthContext);
   const onDeleteUsers = async (id) => {
     // const creator = auth.userId;
@@ -40,7 +41,7 @@ const SafeLifeReports = ({
   return (
     <View style={styles.list}>
       <Card key={id} style={styles.cardStyle}>
-        <CardImage src={{ uri: image }} title="safelife image" />
+        <CardImage source={{ uri: cardImage }} title="safelife image" />
         <CardTitle title={reporttype} subtitle={`Details: ${details}`} />
         <CardContent />
         <CardContent text={`Reporter Name: ${name}`} />

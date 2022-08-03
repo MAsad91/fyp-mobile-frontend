@@ -8,6 +8,7 @@ import { AuthContext } from "../context/auth-context";
 import Input from "./Input";
 import Label from "./Label";
 import Button from "./Button";
+import { API_URL } from "../config";
 
 const LoginForm = () => {
   const auth = useContext(AuthContext);
@@ -25,7 +26,7 @@ const LoginForm = () => {
     try {
       const response = await axios({
         method: "post",
-        url: `http://192.168.100.10:5000/auth/login`,
+        url: `${API_URL.localhost}/auth/login`,
         data: {
           email: values.email,
           password: values.password,

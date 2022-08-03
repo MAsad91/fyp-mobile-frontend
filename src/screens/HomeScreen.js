@@ -4,6 +4,7 @@ import { AuthContext } from "../context/auth-context";
 import StatsList from "../components/StatsList";
 import Chart from "../components/Chart";
 import axios from "axios";
+import {API_URL} from "../config";
 
 const HomeScreen = () => {
   const auth = useContext(AuthContext);
@@ -15,7 +16,7 @@ const HomeScreen = () => {
     const fetchReportCount = async () => {
       try {
         const { data } = await axios.get(
-          `http://192.168.100.10:5000/home/${auth.userId}`
+          `${API_URL.localhost}/home/${auth.userId}`
         );
         setCrimeCount(data.crimeReportCount);
         setSafeLifeCount(data.safelifeReportCount);
@@ -32,21 +33,25 @@ const HomeScreen = () => {
     <ScrollView>
       <View style={styles.container}>
         <StatsList style={styles.crime}
+        key={1}
           title="Crime Reports"
           description="Number of Crime Reports"
           count={crimeCount}
         />
         <StatsList
+          key={2}
           title="SafeLife Reports"
           description="Number of Safelife Reports"
           count={safelifeCount}
         />
         <StatsList
+        key={3}
           title="Lost Reports"
           description="Number of Lost Reports"
           count={lostItemCount}
         />
         <StatsList
+        key={4}
           title="Found Reports"
           description="Number of Found Reports"
           count={foundItemCount}

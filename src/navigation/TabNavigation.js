@@ -62,7 +62,11 @@ export default TabNavigation;
 const HomeStackScreen = ({ navigation }) => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen options={{}} name="Home" component={HomeScreen} />
+      <HomeStack.Screen
+        options={{ headerShown: false }}
+        name="Home"
+        component={HomeScreen}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -70,7 +74,7 @@ const HomeStackScreen = ({ navigation }) => {
 const MapStackScreen = ({ navigation }) => {
   return (
     <MapStack.Navigator>
-      <MapStack.Screen options={{}} name="Map" component={MapScreen} />
+      <MapStack.Screen options={{headerShown: false}} name="Map" component={MapScreen} />
     </MapStack.Navigator>
   );
 };
@@ -78,7 +82,7 @@ const MapStackScreen = ({ navigation }) => {
 const EventStackScreen = ({ navigation }) => {
   return (
     <EventStack.Navigator>
-      <EventStack.Screen options={{}} name="Events" component={EventsScreen} />
+      <EventStack.Screen options={{headerShown: false}} name="Events" component={EventsScreen} />
     </EventStack.Navigator>
   );
 };

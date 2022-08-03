@@ -25,6 +25,7 @@ const LostItemReport = ({
   image,
 }) => {
   // console.log(creator);
+  const cardImage = image[0];
   const auth = useContext(AuthContext);
   // console.log(auth.userId);
   console.log(id);
@@ -43,7 +44,7 @@ const LostItemReport = ({
     <View style={styles.list}>
       {(auth.userId === creator) && (
         <Card key={id} style={styles.cardStyle}>
-          <CardImage src={{ uri: image }} title="Lost Item image" />
+          <CardImage source={{ uri: cardImage }} title="Lost Item image" />
           <CardTitle
             title={lostitemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}

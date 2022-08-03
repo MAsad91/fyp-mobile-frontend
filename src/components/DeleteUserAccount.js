@@ -15,6 +15,17 @@ const DeleteUserAccount = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const userId = route.params;
+  let arrayData=[] ;
+  for (const value in userId) {
+    arrayData.push(userId[value]);
+    console.log(`key=${value}: ${userId[value]}`);
+    
+  }
+  console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  // console.log(user);
+  console.log("id",requestId);
+  // console.log(userId);
 
   const deleteUserSchema = yup.object().shape({
     password: yup
@@ -37,17 +48,19 @@ const DeleteUserAccount = () => {
 
     try {
       const response = await axios({
-        method: "patch",
-        url: `http://192.168.100.10:5000/userlist/deleteaccount/${userId}`,
+        method: "delete",
+        url: `http://192.168.100.10:5000/userlist/deleteaccount/${requestId}`,
         data: {
-          password: values.newpassword,
+          password: values.password,
         },
       });
 
       console.log("response---", response);
     //   auth.login(response.data.userId, response.data.token);
       if (response.status === 201) {
-        navigation.navigate("settings");
+        alert("User Deleted Successfully!")
+        auth.logout();
+        navigation.navigate("Login");
         // values.password = "";
       }
     } catch (error) {

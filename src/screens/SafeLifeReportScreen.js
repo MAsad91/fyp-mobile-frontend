@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import {API_URL} from "../config";
 import AddButton from "../components/AddButton";
 import SafeLifeReports from "../SafelifeReports/SafeLifeReports";
 
@@ -10,12 +11,24 @@ const SafeLifeReportScreen = () => {
   const navigation = useNavigation();
   const auth = useContext(AuthContext);
   const [safeLifeReport, setSafeLifeReport] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setRender(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     const fetchSafeLifeReport = async () => {
       try {
         const { data } = await axios.get(
-          `http://192.168.100.10:5000/safelife-report/${auth.userId}`
+          `${API_URL.localhost}/safelife-report/${auth.userId}`
         );
         setSafeLifeReport(data);
         console.log("Data---: ", data);
@@ -25,13 +38,17 @@ const SafeLifeReportScreen = () => {
       }
     };
     fetchSafeLifeReport();
-  }, []);
+  }, [render]);
   return (
     <View style={styles.container}>
-      <ScrollView >
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {safeLifeReport.map((user) => {
-          return(
-            <SafeLifeReports 
+          return (
+            <SafeLifeReports
               // key={user._id}
               id={user._id}
               reporttype={user.reporttype}
@@ -39,20 +56,22 @@ const SafeLifeReportScreen = () => {
               name={user.name}
               location={user.location}
               image={user.images.map((img) => {
-                return "http://192.168.100.10:5000/" + img;
+                console.log(`IMG:::::${img}`);
+                return `https://safecityservices.herokuapp.com/` + img;
               })}
-        />
+            />
           );
-
         })}
-      
       </ScrollView>
       <View style={styles.addbutton}>
-      <AddButton
-        onPress={() => {
-          navigation.navigate("Main", { screen: "SafelifeForm",params:"post", });
-        }}
-      />
+        <AddButton
+          onPress={() => {
+            navigation.navigate("Main", {
+              screen: "SafelifeForm",
+              params: "post",
+            });
+          }}
+        />
       </View>
     </View>
   );
@@ -63,9 +82,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addbutton: {
-    width:'100%',
-    height:60,
-    backgroundColor:'white'
+    width: "100%",
+    height: 60,
+    backgroundColor: "white",
   },
 });
 

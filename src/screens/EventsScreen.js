@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text,ScrollView } from "react-native";
 import EventsDetail from "../components/EventsDetail";
 import axios from "axios";
+import {API_URL} from "../config";
 const EventsScreen = () => {
   const [eventsList, setEventsList] = useState([]);
 
   useEffect(() => {
     const fetchEventsList = async () => {
       try {
-        const { data } = await axios.get(`http://192.168.100.10:5000/events`);
+        const { data } = await axios.get(`${API_URL.localhost}/events`);
         setEventsList(data);
         console.log("Data---: ", data);
       } catch (error) {

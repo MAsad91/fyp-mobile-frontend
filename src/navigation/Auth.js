@@ -5,6 +5,7 @@ import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import DrawerNavigator from "./DrawerNavigator";
 import ForgotPassword from "../components/ForgotPassword";
+import ResetPasswordForm from "../components/ResetPasswordForm";
 import EmailVerify from "../EmailVerify/EmailVerify";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -32,6 +33,11 @@ const Auth = () => {
       options={{ headerShown: true }}
       name="ForgotPassword"
       component={ForgotPassword}
+      />
+      <Stack.Screen 
+      options={{ headerShown: true }}
+      name="ResetPasswordForm"
+      component={ResetPasswordForm}
       />
       <Stack.Screen
       options={{headerShown: true}}

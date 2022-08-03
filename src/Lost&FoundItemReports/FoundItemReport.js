@@ -25,6 +25,7 @@ const FoundItemReport = ({
   image,
 }) => {
   console.log(id);
+  const cardImage = image[0];
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
 
@@ -42,7 +43,7 @@ const FoundItemReport = ({
     <View style={styles.list}>
       {auth.userId === creator && (
         <Card key={id} style={styles.cardStyle}>
-          <CardImage src={{ uri: image }} title="Lost Item image" />
+          <CardImage source={{ uri: cardImage }} title="Lost Item image" />
           <CardTitle
             title={founditemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}

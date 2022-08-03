@@ -5,6 +5,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import {API_URL} from "../config";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
@@ -73,7 +74,7 @@ const SafeLifeReportForm = () => {
       try {
         const response = await axios({
           method: "post",
-          url: `http://192.168.100.10:5000/safelife-report/reportform`,
+          url: `${API_URL.localhost}/safelife-report/reportform`,
           data: {
             name: name,
             reporttype: reportType,

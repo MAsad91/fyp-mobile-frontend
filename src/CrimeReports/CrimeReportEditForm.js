@@ -1,9 +1,10 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import {API_URL} from "../config";
 import { AuthContext } from "../context/auth-context";
 import Input from "../components/Input";
 import Label from "../components/Label";
@@ -11,21 +12,8 @@ import Button from "../components/Button";
 
 const CrimeReportForm = () => {
   
-  const route = useRoute();
-  const request = route.params;
-  let arrayData=[] ;
-  for (const value in request) {
-    arrayData.push(request[value]);
-    console.log(`key=${value}: ${request[value]}`);
-    
-  }
-  console.log("arrayData: ",arrayData.join(''));
-  const requestId = arrayData.join('');
-  console.log(request);
-  console.log("id",requestId);
-  
-  // const auth = useContext(AuthContext);
   const navigation = useNavigation();
+  const [crimeReport, setCrimeReport] = useState({});
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
@@ -39,6 +27,24 @@ const CrimeReportForm = () => {
   const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const route = useRoute();
+  const request = route.params;
+  let arrayData=[] ;
+  for (const value in request) {
+    arrayData.push(request[value]);
+    // console.log(`key=${value}: ${request[value]}`);
+    
+  }
+  // console.log("arrayData: ",arrayData.join(''));
+  const requestId = arrayData.join('');
+  // console.log(request);
+  // console.log("id",requestId);
+  
+  // const auth = useContext(AuthContext);
+  
+
+  
 
   //Pick image from gallery
   // const pickImage = async () => {
@@ -84,7 +90,7 @@ const CrimeReportForm = () => {
       try {
         const response = await axios({
           method: "patch",
-          url: `http://192.168.100.10:5000/crime-report/reportform/${requestId}`,
+          url: `${API_URL.localhost}/crime-report/reportform/${requestId}`,
           data: {
             name: name,
             crimetype: crimeType,
@@ -102,11 +108,11 @@ const CrimeReportForm = () => {
         if (response.status === 200) {
           alert(`Crime Report is submitted Successfully!`);
           navigation.navigate("Crime Reports");
-          setCrimeType("");
-          // setImage(null);
-          setName("");
-          setDetails("");
-          setLocation("");
+          // setCrimeType("");
+          // // setImage(null);
+          // setName("");
+          // setDetails("");
+          // setLocation("");
         }
       } catch (error) {
         console.log(error.response.data.message);

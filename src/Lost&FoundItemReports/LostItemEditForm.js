@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import axios from "axios"; 
+import {API_URL} from "../config";
 
 const LostItemForm = () => {
   const auth = useContext(AuthContext);
@@ -120,7 +121,7 @@ const LostItemForm = () => {
       try {
         const response = await axios({
           method: "patch",
-          url: `http://192.168.100.10:5000/lost-report/reportform/${requestId}`,
+          url: `${API_URL.localhost}/lost-report/reportform/${requestId}`,
           data: {
             name: name,
             itemname: itemName,

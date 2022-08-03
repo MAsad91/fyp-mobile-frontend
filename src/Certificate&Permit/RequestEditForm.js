@@ -9,6 +9,7 @@ import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
 import axios from "axios";
+import {API_URL} from "../config";
 
 const RequestForm = () => {
   const route = useRoute();
@@ -54,7 +55,7 @@ const RequestForm = () => {
       try {
         const response = await axios({
           method: "patch",
-          url: `http://192.168.100.10:5000/request-certificatepermits/requestform/${requestId}`,
+          url: `${API_URL.localhost}/request-certificatepermits/requestform/${requestId}`,
           data: {
             name: name,
             requesttype: request,

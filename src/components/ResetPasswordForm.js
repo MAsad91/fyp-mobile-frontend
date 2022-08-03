@@ -80,8 +80,12 @@ const ResetPasswordForm = (props) => {
       setConfirmPasswordErrorMsg("Password must contain at least 7 characters");
     }
     if (newPassword !== confirmPassword) {
+      console.log(newPassword, confirmPassword);
       setConfirmPasswordMatchError(true);
-      setConfirmPasswordMatchErrorMsg("password does not matched!!");
+      setConfirmPasswordMatchErrorMsg("password does not matched!!!");
+    } else {
+      setConfirmPasswordMatchError(false);
+      setConfirmPasswordMatchErrorMsg("");
     }
 
     try {
@@ -140,7 +144,7 @@ const ResetPasswordForm = (props) => {
         // onBlur={handleBlur("password")}
         value={newPassword}
         error={newPasswordError === true ? <Text>{newPasswordErrorMsg}</Text> : null}
-        secureTextEntry
+        // secureTextEntry
       />
 
       <Label text="Confirm Password" />
@@ -152,9 +156,6 @@ const ResetPasswordForm = (props) => {
             setConfirmPasswordError(true);
             setConfirmPasswordErrorMsg("Password must contain at least 7 characters");
 
-          } else if (newPassword !== confirmPassword) {
-            setConfirmPasswordMatchError(true);
-            setConfirmPasswordMatchErrorMsg("Password Does not matched!!!");
           } else {
             setConfirmPasswordError(false);
           }
@@ -162,7 +163,7 @@ const ResetPasswordForm = (props) => {
         // onBlur={handleBlur("confirmPassword")}
         value={confirmPassword}
         error={confirmPasswordError === true ? <Text>{confirmPasswordErrorMsg}</Text> : null || confirmPasswordMatchError === true ? <Text>{confirmPasswordMatchErrorMsg}</Text> : null} 
-        secureTextEntry
+        // secureTextEntry
       />
       <Button title="Reset Password" onPress={handleSubmit} />
       <View style={styles.row}>

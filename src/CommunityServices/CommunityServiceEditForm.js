@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import axios from "axios";
+import {API_URL} from "../config";
 
 const CommunityServicesForm = () => {
   const route = useRoute();
@@ -54,7 +55,7 @@ const CommunityServicesForm = () => {
       try {
         const response = await axios({
           method: "patch",
-          url: `http://192.168.100.10:5000/request-communityservices/requestform/${requestId}`,
+          url: `${API_URL.localhost}/request-communityservices/requestform/${requestId}`,
           data: {
             name: name,
             servicetype: request,
@@ -69,9 +70,9 @@ const CommunityServicesForm = () => {
         if (response.status === 200) {
           alert(`Request Submitted Successfully!`);
           navigation.navigate("Community Services");
-          setName("");
-          setDetails("");
-          setRequest("");
+          // setName("");
+          // setDetails("");
+          // setRequest("");
         }
       } catch (error) {
         alert(error.response.data.message);

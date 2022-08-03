@@ -5,6 +5,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import {API_URL} from "../config";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
@@ -84,7 +85,7 @@ const SafeLifeReportForm = () => {
       try {
         const response = await axios({
           method: "patch",
-          url: `http://192.168.100.10:5000/safelife-report/reportform/${requestId}`,
+          url: `${API_URL.localhost}/safelife-report/reportform/${requestId}`,
           data: {
             name: name,
             reporttype: reportType,
@@ -102,11 +103,11 @@ const SafeLifeReportForm = () => {
         if (response.status === 200) {
           alert(`SafeLife Report is submitted Successfully!`);
           navigation.navigate("SafeLife Reports");
-          setName("");
-          setDetails("");
-          setLocation("");
-          // setImage(null);
-          setReportType("");
+          // setName("");
+          // setDetails("");
+          // setLocation("");
+          // // setImage(null);
+          // setReportType("");
         }
       } catch (error) {
         console.log(error.response.data.message);

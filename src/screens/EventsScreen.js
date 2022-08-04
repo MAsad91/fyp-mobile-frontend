@@ -11,6 +11,8 @@ import axios from "axios";
 import { API_URL } from "../config";
 const EventsScreen = () => {
   const [eventsList, setEventsList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [render, setRender] = useState(false);
 
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));

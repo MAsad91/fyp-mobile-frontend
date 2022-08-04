@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, RefreshControl } from "react-native";
-import { RefreshControl } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import AddButton from "../components/AddButton";

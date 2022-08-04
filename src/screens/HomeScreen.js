@@ -8,10 +8,13 @@ import {API_URL} from "../config";
 
 const HomeScreen = () => {
   const auth = useContext(AuthContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const [render, setRender] = useState(false);
   const [crimeCount, setCrimeCount] = useState();
   const [safelifeCount, setSafeLifeCount] = useState();
   const [lostItemCount, setLostItemCount] = useState();
   const [foundItemCount, setFoundItemCount] = useState();
+
 
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));

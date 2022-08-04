@@ -1,41 +1,54 @@
-import { useNavigation, useRoute} from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useContext, useState, useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
-import {API_URL} from "../config";
+import { API_URL } from "../config";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
 
 const SafeLifeReportForm = () => {
+  const auth = useContext(AuthContext);
+  const navigation = useNavigation();
+  const [safelifeReport, setSafelifeReport] = useState({});
+
   const route = useRoute();
-  const request = route.params; 
+  const request = route.params;
   let arrayData = [];
   for (const value in request) {
     arrayData.push(request[value]);
-    console.log(`key=${value}: ${request[value]}`);
-    
+    // console.log(`key=${value}: ${request[value]}`);
   }
-  console.log("arrayData: ",arrayData.join(''));
-  const requestId = arrayData.join('');
-  console.log(request);
+  console.log("arrayData: ", arrayData.join(""));
+  const requestId = arrayData.join("");
+  // console.log(request);
 
-  const auth = useContext(AuthContext);
-  const navigation = useNavigation();
-  const [name, setName] = useState("");
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/safelife-report/report/${requestId}`
+      );
+      setSafelifeReport(result.data[0]);
+      // console.log(result.data[0].name);
+    };
+    LoadReportData();
+  }, []);
+  console.log(safelifeReport.name);
+
+  const [name, setName] = useState(safelifeReport.name);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [reportType, setReportType] = useState("");
-  const [reportTypeError, setReportTypeError] = useState(false);
-  const [reportTypeErrorMsg, setReportTypeErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
+  const [reportType, setReportType] = useState(safelifeReport.reporttype);
+  // const [reportTypeError, setReportTypeError] = useState(false);
+  // const [reportTypeErrorMsg, setReportTypeErrorMsg] = useState("");
+  const [details, setDetails] = useState(safelifeReport.details);
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
-  const [image, setImage] = useState(null);
-  const [location, setLocation] = useState("");
+  // const [image, setImage] = useState(null);
+  const [location, setLocation] = useState(safelifeReport.location);
   const [locationError, setLocationError] = useState(false);
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
 
@@ -57,16 +70,16 @@ const SafeLifeReportForm = () => {
   // };
 
   const handleSubmit = async () => {
-    console.log(name, reportType, details, location, image);
-    if (name.length > 0 && name.length < 3) {
+    console.log(name, reportType, details, location);
+    if (name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details.length > 0 && details.length < 20) {
+    if (details?.length > 0 && details?.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    if (location.length > 0 && location.length < 3) {
+    if (location?.length > 0 && location?.length < 3) {
       setLocationError(true);
       setLocationErrorMsg("Location must have 3 or more characters");
     }
@@ -82,37 +95,37 @@ const SafeLifeReportForm = () => {
     // if (!image) {
     //   return;
     // } else {
-      try {
-        const response = await axios({
-          method: "patch",
-          url: `${API_URL.localhost}/safelife-report/reportform/${requestId}`,
-          data: {
-            name: name,
-            reporttype: reportType,
-            details: details,
-            location: location,
-            // images: image,
-            // creator: auth.userId,
-          },
-          headers: {
-            // "Content-Type": "multipart/form-data",
-            // Authorization: "Bearer " + auth.token,
-          },
-        });
-        console.log("Response---", response);
-        if (response.status === 200) {
-          alert(`SafeLife Report is submitted Successfully!`);
-          navigation.navigate("SafeLife Reports");
-          // setName("");
-          // setDetails("");
-          // setLocation("");
-          // // setImage(null);
-          // setReportType("");
-        }
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
+    try {
+      const response = await axios({
+        method: "patch",
+        url: `${API_URL.localhost}/safelife-report/reportform/${requestId}`,
+        data: {
+          name: name,
+          reporttype: reportType,
+          details: details,
+          location: location,
+          // images: image,
+          // creator: auth.userId,
+        },
+        headers: {
+          // "Content-Type": "multipart/form-data",
+          // Authorization: "Bearer " + auth.token,
+        },
+      });
+      console.log("Response---", response);
+      if (response.status === 200) {
+        alert(`SafeLife Report is submitted Successfully!`);
+        navigation.navigate("SafeLife Reports");
+        // setName("");
+        // setDetails("");
+        // setLocation("");
+        // // setImage(null);
+        // setReportType("");
       }
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
     // }
   };
 

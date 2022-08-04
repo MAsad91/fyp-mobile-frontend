@@ -11,22 +11,8 @@ import Label from "../components/Label";
 import Button from "../components/Button";
 
 const CrimeReportForm = () => {
-  
   const navigation = useNavigation();
   const [crimeReport, setCrimeReport] = useState({});
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState(false);
-  const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [crimeType, setCrimeType] = useState("");
-  const [crimeTypeError, setCrimeTypeError] = useState(false);
-  const [crimeTypeErrorMsg, setCrimeTypeErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
-  const [detailsError, setDetailsError] = useState(false);
-  const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
-  const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const route = useRoute();
   const request = route.params;
@@ -42,6 +28,44 @@ const CrimeReportForm = () => {
   // console.log("id",requestId);
   
   // const auth = useContext(AuthContext);
+
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/crime-report/report/${requestId}`
+      );
+      setCrimeReport(result.data.report);
+      // setName(crimeReport.name);
+      // setCrimeType(crimeReport.crimetype);
+      // setDetails(crimeReport.details);
+      // setLocation(crimeReport.location);
+      console.log(result.data.report);
+    };
+    LoadReportData();
+  }, []);
+  console.log(name);
+  console.log("crime report=>",crimeReport.name);
+  
+ 
+  const [name, setName] = useState(crimeReport.name);
+  const [nameError, setNameError] = useState(false);
+  const [nameErrorMsg, setNameErrorMsg] = useState("");
+  const [crimeType, setCrimeType] = useState(crimeReport.crimetype);
+  const [crimeTypeError, setCrimeTypeError] = useState(false);
+  const [crimeTypeErrorMsg, setCrimeTypeErrorMsg] = useState("");
+  const [details, setDetails] = useState(crimeReport.details);
+  const [detailsError, setDetailsError] = useState(false);
+  const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
+  const [location, setLocation] = useState(crimeReport.location);
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  
+
+  
+
+ 
   
 
   
@@ -64,15 +88,15 @@ const CrimeReportForm = () => {
 
   const handleSubmit = async () => {
     console.log("Crime Type====", crimeType);
-    if ( name.length > 0 && name.length < 3) {
+    if ( name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if ( details.length > 0 && details.length < 20) {
+    if ( details?.length > 0 && details?.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    if ( location.length > 0 && location.length < 3) {
+    if ( location?.length > 0 && location?.length < 3) {
       setError(true);
       setErrorMessage("Location must have 3 or more characters");
     }

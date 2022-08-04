@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
@@ -12,37 +12,53 @@ import axios from "axios";
 import {API_URL} from "../config";
 
 const CommunityServicesForm = () => {
+
+  const auth = useContext(AuthContext);
+  const navigation = useNavigation();
+const [communityReport, setCommunityReport] = useState({});
+
   const route = useRoute();
   const dataRequest = route.params;
   let arrayData=[] ;
   for (const value in dataRequest) {
     arrayData.push(dataRequest[value]);
-    console.log(`key=${value}: ${dataRequest[value]}`);
+    // console.log(`key=${value}: ${dataRequest[value]}`);
     
   }
   console.log("arrayData: ",arrayData.join(''));
   const requestId = arrayData.join('');
-  console.log(dataRequest);
+  // console.log(dataRequest);
   console.log("id",requestId);
 
-  const auth = useContext(AuthContext);
-  const navigation = useNavigation();
-  const [request, setRequest] = useState("");
-  const [requestError, setRequestError] = useState(false);
-  const [requestErrorMsg, setRequestErrorMsg] = useState("");
-  const [name, setName] = useState("");
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/request-communityservices/report/${requestId}`
+      );
+      setCommunityReport(result.data.report);
+      // console.log(result.data.report);
+    };
+    LoadReportData();
+  }, []);
+  console.log(communityReport.name);
+
+  
+  const [request, setRequest] = useState(communityReport.servicetype);
+  // const [requestError, setRequestError] = useState(false);
+  // const [requestErrorMsg, setRequestErrorMsg] = useState("");
+  const [name, setName] = useState(communityReport.name);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
+  const [details, setDetails] = useState(communityReport.details);
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
 
   const handleSubmit = async () => {
-    if (name.length > 0 && name.length < 3) {
+    if (name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details.length > 0 && details.length < 20) {
+    if (details?.length > 0 && details?.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
@@ -109,10 +125,10 @@ const CommunityServicesForm = () => {
             //   request.length > 0 &&
             //   request.length === 0
             // ) {
-            //   requestError(true);
+            //   setRequestError(true);
             //   requestErrorMsg("Request type must be choose");
             // } else {
-            //   requestError(false);
+            //   setRequestError(false);
             // }
           }}
           mode="dropdown"

@@ -1,74 +1,75 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState, useContext } from "react";
-import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Text,
+  AppRegistry,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/auth-context";
 import * as ImagePicker from "expo-image-picker";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
-import axios from "axios"; 
-import {API_URL} from "../config";
+import axios from "axios";
+import { API_URL } from "../config";
 
 const LostItemForm = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
+  const [lostReport, setLostReport] = useState({});
+
   const route = useRoute();
   const request = route.params;
-  let arrayData=[] ;
+  let arrayData = [];
   for (const value in request) {
     arrayData.push(request[value]);
-    console.log(`key=${value}: ${request[value]}`);
-    
+    // console.log(`key=${value}: ${request[value]}`);
   }
-  console.log("arrayData: ",arrayData.join(''));
-  const requestId = arrayData.join('');
-  console.log(request);
-  console.log("id",requestId);
+  console.log("arrayData: ", arrayData.join(""));
+  const requestId = arrayData.join("");
+  // console.log(request);
+  console.log("id", requestId);
 
-  const [name, setName] = useState("");
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/lost-report/report/${requestId}`
+      );
+      setLostReport(result.data.report);
+    };
+    LoadReportData();
+  }, []);
+  console.log("lost",lostReport.name);
+
+  const [name, setName] = useState(lostReport.name);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [itemName, setItemName] = useState("");
+  const [itemName, setItemName] = useState(lostReport.itemname);
   const [itemNameError, setItemNameError] = useState(false);
   const [itemNameErrorMsg, setItemNameErrorMsg] = useState("");
-  const [state, setState] = useState("");
+  const [state, setState] = useState(lostReport.state);
   const [stateError, setStateError] = useState(false);
   const [stateErrorMsg, setStateErrorMsg] = useState("");
-  const [lostItem, setLostItem] = useState("");
-  const [lostItemError, setLostItemError] = useState(false);
-  const [lostItemErrorMsg, setLostItemErrorMsg] = useState("");
-  const [color, setColor] = useState("");
+  const [lostItem, setLostItem] = useState(lostReport.lostitemtype);
+  // const [lostItemError, setLostItemError] = useState(false);
+  // const [lostItemErrorMsg, setLostItemErrorMsg] = useState("");
+  const [color, setColor] = useState(lostReport.color);
   const [colorError, setColorError] = useState(false);
   const [colorErrorMsg, setColorErrorMsg] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(lostReport.location);
   const [locationError, setLocationError] = useState(false);
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
+  const [details, setDetails] = useState(lostReport.details);
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(lostReport.description);
   const [descriptionError, setDescriptionError] = useState(false);
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState("");
-  const [image, setImage] = useState(null);
-
-  //Pick image from gallery
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log("Result---", result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
-
+ 
   const handleSubmit = async () => {
     console.log(
       name,
@@ -79,34 +80,33 @@ const LostItemForm = () => {
       location,
       details,
       description,
-      image
     );
 
-    if (name.length > 0 && name.length < 3) {
+    if (name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (itemName.length > 0 && itemName.length < 4) {
+    if (itemName?.length > 0 && itemName?.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state.length > 0 && state.length < 3) {
+    if (state?.length > 0 && state?.length < 3) {
       setStateError(true);
       setStateErrorMsg("Item State must have 3 or more characters");
     }
-    if (color.length > 0 && color.length < 3) {
+    if (color?.length > 0 && color?.length < 3) {
       setColorError(true);
       setColorErrorMsg("Item color must have 3 or more characters");
     }
-    if (location.length > 0 && location.length < 4) {
+    if (location?.length > 0 && location?.length < 4) {
       setLocationError(true);
       setLocationErrorMsg("Location must have 4 or more characters");
     }
-    if (details.length > 0 && details.length < 4) {
+    if (details?.length > 0 && details?.length < 4) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 4 or more characters");
     }
-    if (description.length > 0 && description.length < 15) {
+    if (description?.length > 0 && description?.length < 15) {
       setDescriptionError(true);
       setDescriptionErrorMsg("Description must have 15 or more characters");
     }
@@ -118,45 +118,45 @@ const LostItemForm = () => {
     // if (!image) {
     //   return;
     // } else {
-      try {
-        const response = await axios({
-          method: "patch",
-          url: `${API_URL.localhost}/lost-report/reportform/${requestId}`,
-          data: {
-            name: name,
-            itemname: itemName,
-            state: state,
-            lostitemtype: lostItem,
-            color: color,
-            location: location,
-            details: details,
-            description: description,
-            // images: image,
-            // creator: auth.userId,
-          },
-          headers: {
-            // "Content-Type": "multipart/form-data",
-            // Authorization: "Bearer " + auth.token,
-          },
-        });
-        console.log("Response---", response);
-        if (response.status === 200) {
-          alert(`Lost Item Report is submitted successfully!`);
-          navigation.navigate("LostItems Reports");
-          setName("");
-          setItemName("");
-          setColor("");
-          setState("");
-          setLostItem("");
-          setDetails("");
-          setDescription("");
-          setLocation("");
-          // setImage(null);
-        }
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
+    try {
+      const response = await axios({
+        method: "patch",
+        url: `${API_URL.localhost}/lost-report/reportform/${requestId}`,
+        data: {
+          name: name,
+          itemname: itemName,
+          state: state,
+          lostitemtype: lostItem,
+          color: color,
+          location: location,
+          details: details,
+          description: description,
+          // images: image,
+          // creator: auth.userId,
+        },
+        headers: {
+          // "Content-Type": "multipart/form-data",
+          // Authorization: "Bearer " + auth.token,
+        },
+      });
+      console.log("Response---", response);
+      if (response.status === 200) {
+        alert(`Lost Item Report is submitted successfully!`);
+        navigation.navigate("LostItems Reports");
+        setName("");
+        setItemName("");
+        setColor("");
+        setState("");
+        setLostItem("");
+        setDetails("");
+        setDescription("");
+        setLocation("");
+        // setImage(null);
       }
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
     // }
   };
 

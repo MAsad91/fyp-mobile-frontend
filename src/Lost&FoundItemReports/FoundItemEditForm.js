@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/auth-context";
@@ -13,62 +13,55 @@ import {API_URL} from "../config";
 const FoundItemForm = () => {
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
+  const [foundReport, setFoundReport] = useState({});
   const route = useRoute();
-  
   const request = route.params;
   let arrayData=[] ;
   for (const value in request) {
     arrayData.push(request[value]);
-    console.log(`key=${value}: ${request[value]}`);
+    // console.log(`key=${value}: ${request[value]}`);
     
   }
   console.log("arrayData: ",arrayData.join(''));
   const requestId = arrayData.join('');
-  console.log(request);
+  // console.log(request);
   console.log("id",requestId);
 
-  const [name, setName] = useState("");
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/found-report/report/${requestId}`
+      );
+      setFoundReport(result.data.report);
+    };
+    LoadReportData();
+  }, []);
+  console.log("found",foundReport.name);
+
+  const [name, setName] = useState(foundReport.name);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [itemName, setItemName] = useState("");
+  const [itemName, setItemName] = useState(foundReport.itemname);
   const [itemNameError, setItemNameError] = useState(false);
   const [itemNameErrorMsg, setItemNameErrorMsg] = useState("");
-  const [state, setState] = useState("");
+  const [state, setState] = useState(foundReport.state);
   const [stateError, setStateError] = useState(false);
   const [stateErrorMsg, setStateErrorMsg] = useState("");
-  const [foundItem, setFoundItem] = useState("");
-  const [foundItemError, setFoundItemError] = useState(false);
-  const [foundItemErrorMsg, setFoundItemErrorMsg] = useState("");
-  const [color, setColor] = useState("");
+  const [foundItem, setFoundItem] = useState(foundReport.founditemtype);
+  // const [foundItemError, setFoundItemError] = useState(false);
+  // const [foundItemErrorMsg, setFoundItemErrorMsg] = useState("");
+  const [color, setColor] = useState(foundReport.color);
   const [colorError, setColorError] = useState(false);
   const [colorErrorMsg, setColorErrorMsg] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(foundReport.location);
   const [locationError, setLocationError] = useState(false);
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
+  const [details, setDetails] = useState(foundReport.details);
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(foundReport.description);
   const [descriptionError, setDescriptionError] = useState(false);
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState("");
-  const [image, setImage] = useState(null);
-
-  //Pick image from gallery
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log("Result---", result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     console.log(
@@ -80,34 +73,33 @@ const FoundItemForm = () => {
       location,
       details,
       description,
-      image
     );
 
-    if (name.length > 0 && name.length < 3) {
+    if (name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (itemName.length > 0 && itemName.length < 4) {
+    if (itemName?.length > 0 && itemName?.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state.length > 0 && state.length < 3) {
+    if (state?.length > 0 && state?.length < 3) {
       setStateError(true);
       setStateErrorMsg("Item State must have 3 or more characters");
     }
-    if (color.length > 0 && color.length < 3) {
+    if (color?.length > 0 && color?.length < 3) {
       setColorError(true);
       setColorErrorMsg("Item color must have 3 or more characters");
     }
-    if (location.length > 0 && location.length < 4) {
+    if (location?.length > 0 && location?.length < 4) {
       setLocationError(true);
       setLocationErrorMsg("Location must have 4 or more characters");
     }
-    if (details.length > 0 && details.length < 4) {
+    if (details?.length > 0 && details?.length < 4) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 4 or more characters");
     }
-    if (description.length > 0 && description.length < 15) {
+    if (description?.length > 0 && description?.length < 15) {
       setDescriptionError(true);
       setDescriptionErrorMsg("Description must have 15 or more characters");
     }
@@ -148,14 +140,14 @@ const FoundItemForm = () => {
         if (response.status === 200) {
           alert(`Found Item Report is submitted successfully!`);
           navigation.navigate("FoundItems Reports");
-          setName("");
-          setItemName("");
-          setColor("");
-          setFoundItem("");
-          setDescription("");
-          setLocation("");
-          setDetails("");
-          setState("");
+          // setName("");
+          // setItemName("");
+          // setColor("");
+          // setFoundItem("");
+          // setDescription("");
+          // setLocation("");
+          // setDetails("");
+          // setState("");
           // setImage(null);
         }
       } catch (error) {

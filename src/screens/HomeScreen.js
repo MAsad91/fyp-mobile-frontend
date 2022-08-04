@@ -52,25 +52,25 @@ const HomeScreen = () => {
     >
       <View style={styles.container}>
         <StatsList style={styles.crime}
-        key={1}
+          // key={1}
           title="Crime Reports"
           description="Number of Crime Reports"
           count={crimeCount}
         />
         <StatsList
-          key={2}
+          // key={2}
           title="SafeLife Reports"
           description="Number of Safelife Reports"
           count={safelifeCount}
         />
         <StatsList
-        key={3}
+          // key={3}
           title="Lost Reports"
           description="Number of Lost Reports"
           count={lostItemCount}
         />
         <StatsList
-        key={4}
+          // key={4}
           title="Found Reports"
           description="Number of Found Reports"
           count={foundItemCount}

@@ -98,10 +98,10 @@ const RequestForm = () => {
               request === "" &&
               request.length === 0
             ) {
-              requestError(true);
-              requestErrorMsg("Request type must be choose");
+              setRequestError(true);
+              setRequestErrorMsg("Request type must be choose");
             } else {
-              requestError(false);
+              setRequestError(false);
             }
           }}
           mode="dropdown"

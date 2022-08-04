@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
@@ -12,41 +12,53 @@ import axios from "axios";
 import {API_URL} from "../config";
 
 const RequestForm = () => {
-  const route = useRoute();
-  const dataRequest = route.params;
-  let arrayData=[] ;
-  for (const value in dataRequest) {
-    arrayData.push(dataRequest[value]);
-    console.log(`key=${value}: ${dataRequest[value]}`);
-    
-  }
-  console.log("arrayData: ",arrayData.join(''));
-  const requestId = arrayData.join('');
-  console.log(dataRequest);
-  console.log("id",requestId);
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
-  const [request, setRequest] = useState("");
-  const [requestError, setRequestError] = useState(false);
-  const [requestErrorMsg, setRequestErrorMsg] = useState("");
-  const [name, setName] = useState("");
+  const [requestReport, setRequestReport] = useState({});
+  const route = useRoute();
+  const dataRequest = route.params;
+
+  let arrayData=[] ;
+  for (const value in dataRequest) {
+    arrayData.push(dataRequest[value]);
+  }
+  const requestId = arrayData.join('');
+  console.log("id",requestId);
+
+  useEffect(() => {
+    const LoadReportData = async () => {
+      const result = await axios.get(
+        `${API_URL.localhost}/request-certificatepermits/report/${requestId}`
+      );
+      setRequestReport(result.data.report);
+      console.log(result.data.report);
+    };
+    LoadReportData();
+  }, []);
+  console.log(requestReport.name);
+
+  
+  const [request, setRequest] = useState(requestReport.requesttype);
+  // const [requestError, setRequestError] = useState(false);
+  // const [requestErrorMsg, setRequestErrorMsg] = useState("");
+  const [name, setName] = useState(requestReport.name);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
-  const [details, setDetails] = useState("");
+  const [details, setDetails] = useState(requestReport.details);
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
 
   const handleSubmit = async () => {
-    if (name.length > 0 && name.length < 3) {
+    if (name?.length > 0 && name?.length < 3) {
       setNameError(true);
       setNameErrorMsg("Name must have 3 or more characters");
     }
-    if (details.length > 0 && details.length < 20) {
+    if (details?.length > 0 && details?.length < 20) {
       setDetailsError(true);
       setDetailsErrorMsg("Details must have 20 or more characters");
     }
-    // if (request == "requesttype" || request == "" || request.length === 0) {
+    // if (request == "requesttype" || request == "" || request?.length === 0) {
     //   setRequestError(true);
     //   setRequestErrorMsg("Request type must be choose");
     //   return;

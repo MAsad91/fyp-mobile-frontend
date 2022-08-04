@@ -53,7 +53,7 @@ const EventsScreen = () => {
               location={user.location}
               name={user.name}
               image={user.images.map((img) => {
-                return "http://192.168.100.10:5000/" + img;
+                return `https://safecityservices.herokuapp.com/` + img;
               })}
             />
           );

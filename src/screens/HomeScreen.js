@@ -42,9 +42,11 @@ const HomeScreen = () => {
     fetchReportCount();
   }, [render]);
   return (
-    <ScrollView refreshControl={
+    <ScrollView 
+    refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }>
+    }
+    >
       <View style={styles.container}>
         <StatsList style={styles.crime}
         key={1}

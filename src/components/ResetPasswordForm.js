@@ -93,16 +93,16 @@ const ResetPasswordForm = (props) => {
         method: "post",
         url: `${API_URL.localhost}/auth/changepassword`,
         data: {
-          otp: values.otp,
+          otp: otp,
           email: props.email,
-          password: values.newpassword,
+          password: newPassword,
         },
       });
 
       console.log("response---", response);
       if (response.status === 200) {
         alert("user password Reset Successfully!");
-        navigation.navigate("settings");
+        navigation.navigate("Login");
       }
     } catch (error) {
       console.log(error);
@@ -117,7 +117,7 @@ const ResetPasswordForm = (props) => {
         placeholder="Enter OTP"
         onChangeText={(otp)=> {
           setOtp(otp);
-          if(otp.length<4) {
+          if(otp.length<4 ) {
             setOtpError(true);
             setOtpErrorMsg("OTP must contain 4 digits!");
           } else {

@@ -20,6 +20,7 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
+import {API_URL} from "../config";
 const CrimeReportList = ({ key, id, crimetype, details, name, location, image }) => {
  
   console.log(crimetype);
@@ -38,7 +39,7 @@ const CrimeReportList = ({ key, id, crimetype, details, name, location, image })
     console.log("id",id);
     
     const response = await axios.delete(
-      `http://192.168.100.10:5000/crime-report/${id}`
+      `${API_URL.localhost}/crime-report/${id}`
     );
     if (response.status === 200) {
       console.log("userDeleted======>")

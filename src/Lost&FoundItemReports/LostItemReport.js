@@ -11,6 +11,7 @@ import {
 } from "react-native-material-cards";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import {API_URL} from "../config";
 const LostItemReport = ({
   creator,
   id,
@@ -33,7 +34,7 @@ const LostItemReport = ({
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
-      `http://192.168.100.10:5000/lost-report/${id}`
+      `${API_URL.localhost}/lost-report/${id}`
     );
     if (response.status === 200) {
       alert("Deleted successfully!",response.status);

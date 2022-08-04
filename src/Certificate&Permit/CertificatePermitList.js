@@ -10,13 +10,14 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
+import {API_URL} from "../config";
 
 const CertificatePermitList = ({ id, certificatetype, details, name }) => {
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
-      `http://192.168.100.10:5000/request-certificatepermits/${id}`
+      `${API_URL.localhost}/request-certificatepermits/${id}`
     );
     if (response.status === 200) {
       alert("Deleted successfully!",response.status);

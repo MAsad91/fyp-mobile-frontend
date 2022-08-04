@@ -10,12 +10,13 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
+import {API_URL} from "../config";
 const ServicesList = ({ id, name, servicetype, details }) => {
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
-      `http://192.168.100.10:5000/request-communityservices/report/${id}`
+      `${API_URL.localhost}/request-communityservices/report/${id}`
     );
     if (response.status === 200) {
       alert("Deleted successfully!",response.status);

@@ -10,6 +10,7 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
+import {API_URL} from "../config";
 import { AuthContext } from "../context/auth-context";
 const FoundItemReport = ({
   creator,
@@ -32,7 +33,7 @@ const FoundItemReport = ({
   const onDeleteUsers = async (id) => {
     
     const response = await axios.delete(
-      `http://192.168.100.10:5000/found-report/${id}`
+      `${API_URL.localhost}/found-report/${id}`
     );
     if (response.status === 200) {
       alert("Deleted successfully!",response.status);

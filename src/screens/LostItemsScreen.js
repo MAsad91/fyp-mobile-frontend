@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import {API_URL} from "../config";
@@ -48,6 +48,7 @@ const LostItemsScreen = () => {
         {lostItemReport.map((user) => {
           return (
             <LostItemReport
+              key={user._id}
               creator={user.creator}
               id={user._id}
               lostitemtype={user.lostitemtype}

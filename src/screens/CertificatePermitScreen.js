@@ -1,6 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import { API_URL } from "../config";
@@ -50,6 +56,7 @@ const CertificatePermitScreen = () => {
         {requestList.map((user) => {
           return (
             <CertificatePermitList
+              key={user._id}
               id={user._id}
               certificatetype={user.requesttype}
               details={user.details}

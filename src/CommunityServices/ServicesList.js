@@ -11,7 +11,7 @@ import {
 } from "react-native-material-cards";
 import axios from "axios";
 import {API_URL} from "../config";
-const ServicesList = ({ id, name, servicetype, details }) => {
+const ServicesList = ({key, id, name, servicetype, details }) => {
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
@@ -25,7 +25,7 @@ const ServicesList = ({ id, name, servicetype, details }) => {
 
   return (
     <View style={styles.list}>
-      <Card key={id} style={styles.cardStyle}>
+      <Card key={key} style={styles.cardStyle}>
         <CardTitle title={servicetype} subtitle={`\nDetails: ${details}`} />
         <CardContent />
         <CardAction separator={true} />

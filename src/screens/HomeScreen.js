@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import StatsList from "../components/StatsList";
 import Chart from "../components/Chart";
@@ -12,6 +12,18 @@ const HomeScreen = () => {
   const [safelifeCount, setSafeLifeCount] = useState();
   const [lostItemCount, setLostItemCount] = useState();
   const [foundItemCount, setFoundItemCount] = useState();
+
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setRender(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+
   useEffect(() => {
     const fetchReportCount = async () => {
       try {
@@ -28,9 +40,11 @@ const HomeScreen = () => {
       }
     };
     fetchReportCount();
-  }, []);
+  }, [render]);
   return (
-    <ScrollView>
+    <ScrollView refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }>
       <View style={styles.container}>
         <StatsList style={styles.crime}
         key={1}
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   crime: {
-    borderBottomColor:'green'
+    borderBottomColor:'black'
   }
 });
 

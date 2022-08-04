@@ -10,6 +10,17 @@ const MapScreen = () => {
   // if (!isLoaded) {
   //   return <div className={styles.loading}>Loading........</div>;
   // }
+
+  // const wait = (timeout) => {
+  //   return new Promise((resolve) => setTimeout(resolve, timeout));
+  // };
+
+  // const onRefresh = React.useCallback(() => {
+  //   setRefreshing(true);
+  //   setRender(true);
+  //   wait(2000).then(() => setRefreshing(false));
+  // }, []);
+
   const center = { lat: 33.6844, lng: 73.0479 };
   const latitude = 33.6844;
   const longitude = 73.0479;
@@ -17,7 +28,11 @@ const MapScreen = () => {
   const longitudeDelta = 0.0421;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container}
+    // refreshControl={
+    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    // }
+    >
       <MapView
         style={styles.map}
         // center={center}

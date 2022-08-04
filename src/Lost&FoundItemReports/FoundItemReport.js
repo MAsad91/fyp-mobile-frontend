@@ -13,6 +13,7 @@ import axios from "axios";
 import {API_URL} from "../config";
 import { AuthContext } from "../context/auth-context";
 const FoundItemReport = ({
+  key,
   creator,
   id,
   founditemtype,
@@ -43,7 +44,7 @@ const FoundItemReport = ({
   return (
     <View style={styles.list}>
       {auth.userId === creator && (
-        <Card key={id} style={styles.cardStyle}>
+        <Card key={key} style={styles.cardStyle}>
           <CardImage source={{ uri: cardImage }} title="Lost Item image" />
           <CardTitle
             title={founditemtype}
@@ -92,7 +93,7 @@ const FoundItemReport = ({
         </Card>
       )}
       {!(auth.userId === creator) && (
-        <Card key={id} style={styles.cardStyle}>
+        <Card key={key} style={styles.cardStyle}>
           <CardImage src={{ uri: image }} title="Lost Item image" />
           <CardTitle
             title={founditemtype}

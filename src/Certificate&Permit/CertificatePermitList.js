@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import {API_URL} from "../config";
 
-const CertificatePermitList = ({ id, certificatetype, details, name }) => {
+const CertificatePermitList = ({key, id, certificatetype, details, name }) => {
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
@@ -26,7 +26,7 @@ const CertificatePermitList = ({ id, certificatetype, details, name }) => {
 
   return (
     <View style={styles.list}>
-      <Card key={id} style={styles.cardStyle}>
+      <Card key={key} style={styles.cardStyle}>
         <CardTitle title={certificatetype} subtitle={`\nDetails: ${details}`} />
         <CardContent />
         <CardAction separator={true} />

@@ -1,6 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import { API_URL } from "../config";
@@ -50,6 +56,7 @@ const CommunityServicesScreen = () => {
         {servicesList.map((user) => {
           return (
             <ServicesList
+              key={user._id}
               id={user._id}
               name={user.name}
               servicetype={user.servicetype}

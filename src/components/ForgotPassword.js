@@ -52,7 +52,9 @@ const ForgotPassword = () => {
     }
   };
   return (
-    <View>
+    <Fragment>
+      <ScrollView>
+      <View>
         {showForm ? (
             <Formik
             validationSchema={signUpSchema}
@@ -100,6 +102,9 @@ const ForgotPassword = () => {
         )}
       
     </View>
+      </ScrollView>
+      </Fragment>
+    
   );
 };
 

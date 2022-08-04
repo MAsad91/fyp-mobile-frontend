@@ -11,7 +11,9 @@ import {
   CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
+import {API_URL} from "../config";
 const SafeLifeReports = ({
+  key,
   id,
   reporttype,
   details,
@@ -30,7 +32,7 @@ const SafeLifeReports = ({
     //   headers: { Authorization: "Bearer " + auth.token },
     // });
     const response = await axios.delete(
-      `http://192.168.100.10:5000/safelife-report/${id}`
+      `${API_URL.localhost}/safelife-report/${id}`
     );
     if (response.status === 200) {
       alert("Deleted successfully!",response.status);
@@ -40,7 +42,7 @@ const SafeLifeReports = ({
   const navigation = useNavigation();
   return (
     <View style={styles.list}>
-      <Card key={id} style={styles.cardStyle}>
+      <Card key={key} style={styles.cardStyle}>
         <CardImage source={{ uri: cardImage }} title="safelife image" />
         <CardTitle title={reporttype} subtitle={`Details: ${details}`} />
         <CardContent />

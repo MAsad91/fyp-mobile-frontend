@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, RefreshControl } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import {API_URL} from "../config";
@@ -49,7 +49,7 @@ const SafeLifeReportScreen = () => {
         {safeLifeReport.map((user) => {
           return (
             <SafeLifeReports
-              // key={user._id}
+              key={user._id}
               id={user._id}
               reporttype={user.reporttype}
               details={user.details}

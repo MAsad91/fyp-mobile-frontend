@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import {API_URL} from "../config";
 import { AuthContext } from "../context/auth-context";
+import ImageUploader from "../components/userImageUploader";
 const FoundItemReport = ({
   key,
   creator,
@@ -26,6 +27,42 @@ const FoundItemReport = ({
   location,
   image,
 }) => {
+
+  const pickImage = (img) => {
+    setUserImage(img);
+    handleSubmit();
+  };
+  const handleSubmit = async () => {
+    console.log("data to be submitted",userImage, itemname, creator,id)
+    try {
+      let formData = new FormData();
+      // image.map((image) => {
+      //   formData.append("images", image.originFileObj);
+      // });
+      formData.append("images", userImage);
+      formData.append("itemname", itemname);
+      formData.append("creator", creator);
+      formData.append("reportId", id);
+      const response = await axios({
+        method: "post",
+        url: `${API_URL.localhost}/found-report/founditemimage`,
+        data: formData,
+        headers: {
+          // "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+      let result = response.data.result;
+      alert("Image Comparison Result", result);
+      if (response.status === 201) {
+        alert("found Item Image Uploaded Successfully!");
+        setUserImage(null);
+      }
+    } catch (err) {
+      alert("Uploading found Item Image is Failed" || error.response.data.message);
+    }
+  };
+
   console.log(id);
   const cardImage = image[0];
   const auth = useContext(AuthContext);
@@ -45,7 +82,7 @@ const FoundItemReport = ({
     <View style={styles.list}>
       {auth.userId === creator && (
         <Card key={key} style={styles.cardStyle}>
-          <CardImage source={{ uri: cardImage }} title="Lost Item image" />
+          <CardImage source={{ uri: cardImage }} title="found Item image" />
           <CardTitle
             title={founditemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}
@@ -65,11 +102,12 @@ const FoundItemReport = ({
 
           <Text style={styles.text}>Upload found Item Image You found</Text>
           <View style={styles.imageStyle}>
-            <Button
+          <ImageUploader func={pickImage} />
+            {/* <Button
               title="Pick Image on Roll Camera"
               color="black"
               onPress={() => {}}
-            />
+            /> */}
           </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
@@ -94,7 +132,7 @@ const FoundItemReport = ({
       )}
       {!(auth.userId === creator) && (
         <Card key={key} style={styles.cardStyle}>
-          <CardImage src={{ uri: image }} title="Lost Item image" />
+          <CardImage src={{ uri: image }} title="found Item image" />
           <CardTitle
             title={founditemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}
@@ -124,11 +162,12 @@ const FoundItemReport = ({
           </CardAction>
           <Text style={styles.text}>Upload found Item Image You found</Text>
           <View style={styles.imageStyle}>
-            <Button
+          <ImageUploader func={pickImage} />
+            {/* <Button
               title="Pick Image on Roll Camera"
               color="black"
               onPress={() => {}}
-            />
+            /> */}
           </View>
         </Card>
       )}
@@ -173,8 +212,8 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   imageStyle: {
-    padding: 10,
-    paddingHorizontal: 40,
+    // padding: 10,
+    paddingHorizontal: 60,
   },
 });
 

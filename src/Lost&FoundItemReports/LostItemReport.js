@@ -11,7 +11,10 @@ import {
 } from "react-native-material-cards";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
-import {API_URL} from "../config";
+import { API_URL } from "../config";
+
+import ImageUploader from "../components/userImageUploader";
+
 const LostItemReport = ({
   key,
   creator,
@@ -26,11 +29,50 @@ const LostItemReport = ({
   location,
   image,
 }) => {
-  // console.log(creator);
+  //
+
+  const [userImage, setUserImage] = useState(null);
+
+  const pickImage = (img) => {
+    setUserImage(img);
+    handleSubmit();
+  };
+  const handleSubmit = async () => {
+    console.log("data to be submitted",userImage, itemname, creator,id)
+    try {
+      let formData = new FormData();
+      // image.map((image) => {
+      //   formData.append("images", image.originFileObj);
+      // });
+      formData.append("images", userImage);
+      formData.append("itemname", itemname);
+      formData.append("creator", creator);
+      formData.append("reportId", id);
+      const response = await axios({
+        method: "post",
+        url: `${API_URL.localhost}/lost-report/lostitemimage`,
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response);
+      let result = response.data.result;
+      alert("Image Comparison Result", result);
+      if (response.status === 201) {
+        alert("Lost Item Image Uploaded Successfully!");
+        setUserImage(null);
+      }
+    } catch (err) {
+      alert("Uploading Lost Item Image is Failed" || error.response.data.message);
+    }
+  };
+
+
   const cardImage = image[0];
   const auth = useContext(AuthContext);
   // console.log(auth.userId);
-  console.log(id);
+  // console.log(id);
   const navigation = useNavigation();
 
   const onDeleteUsers = async (id) => {
@@ -38,13 +80,13 @@ const LostItemReport = ({
       `${API_URL.localhost}/lost-report/${id}`
     );
     if (response.status === 200) {
-      alert("Deleted successfully!",response.status);
+      alert("Deleted successfully!" || response.status);
     }
   };
 
   return (
     <View style={styles.list}>
-      {(auth.userId === creator) && (
+      {auth.userId === creator && (
         <Card key={key} style={styles.cardStyle}>
           <CardImage source={{ uri: cardImage }} title="Lost Item image" />
           <CardTitle
@@ -66,11 +108,12 @@ const LostItemReport = ({
 
           <Text style={styles.text}>Upload Lost Item Image You found</Text>
           <View style={styles.imageStyle}>
-            <Button
+            <ImageUploader func={pickImage} />
+            {/* <Button
               title="Pick Image on Roll Camera"
               color="black"
               onPress={() => {}}
-            />
+            /> */}
           </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
@@ -118,11 +161,13 @@ const LostItemReport = ({
           </CardAction> */}
           <Text style={styles.text}>Upload Lost Item Image You found</Text>
           <View style={styles.imageStyle}>
-            <Button
+            <ImageUploader func={pickImage} />
+            {/* <Button
+              
               title="Pick Image on Roll Camera"
               color="black"
               onPress={() => {}}
-            />
+            /> */}
           </View>
         </Card>
       )}
@@ -167,8 +212,10 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   imageStyle: {
-    padding: 10,
-    paddingHorizontal: 40,
+    // height:100,
+    // margin:20,
+    // padding: 20,
+    paddingHorizontal: 60,
   },
 });
 

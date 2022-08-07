@@ -1,20 +1,20 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
+import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import {API_URL} from "../config";
+import { API_URL } from "../config";
 import { AuthContext } from "../context/auth-context";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import Button from "../components/Button";
+import ImageUploader from "../components/ImageUploader";
 
 const CrimeReportForm = () => {
   // const route = useRoute();
   // const requestMethod = route.params;
   // console.log(requestMethod);
-  
+
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [name, setName] = useState("");
@@ -27,24 +27,12 @@ const CrimeReportForm = () => {
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
   const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [image, setImage] = useState();
 
-  //Pick image from gallery
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log("Result---", result);
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
+  const pickImage = (img) => {
+    setImage(img);
   };
 
   const handleSubmit = async () => {
@@ -73,31 +61,31 @@ const CrimeReportForm = () => {
       console.log("Name===", name, crimeType, details, location, image);
 
       try {
+        let formData = new FormData();
+        formData.append("name", name);
+        formData.append("crimetype", crimeType);
+        formData.append("details", details);
+        formData.append("location", location);
+        formData.append("images", image);
+        formData.append("creator", auth.userId);
         const response = await axios({
           method: "post",
           url: `${API_URL.localhost}/crime-report/reportform`,
-          data: {
-            name: name,
-            crimetype: crimeType,
-            details: details,
-            location: location,
-            images: image,
-            creator: auth.userId,
-          },
+          data: formData,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + auth.token,
-          },
+            Authorization: "Bearer " + auth.token
+          }
         });
         console.log("Response---", response);
         if (response.status === 201) {
           alert(`Crime Report is submitted Successfully!`);
           navigation.navigate("Crime Reports");
           setCrimeType("");
-          setImage(null);
           setName("");
           setDetails("");
           setLocation("");
+          setImage();
         }
       } catch (error) {
         console.log(error.response.data.message);
@@ -189,11 +177,8 @@ const CrimeReportForm = () => {
         value={location}
         error={error === true ? <Text>{errorMessage}</Text> : null}
       />
-      <View>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-        {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {!image && <Text style={styles.error}>Image must be choose</Text>}
-      </View>
+
+      <ImageUploader func={pickImage} />
 
       <Button title="Submit" onPress={handleSubmit} />
     </ScrollView>
@@ -205,7 +190,7 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 70,
     marginVertical: 10,
-    marginLeft: 15,
+    marginLeft: 15
   },
   picker: {
     flex: 1,
@@ -213,19 +198,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "grey",
     borderRadius: 5,
-    paddingLeft: 10,
+    paddingLeft: 10
   },
   imageStyle: {
     width: 300,
     height: 200,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   error: {
     color: "red",
     fontSize: 15,
     marginTop: 3,
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 });
 
 export default CrimeReportForm;

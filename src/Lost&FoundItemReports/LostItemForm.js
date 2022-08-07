@@ -3,12 +3,12 @@ import React, { useState, useContext } from "react";
 import { View, StyleSheet, Image, ScrollView, Text } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/auth-context";
-import * as ImagePicker from "expo-image-picker";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
-import axios from "axios"; 
-import {API_URL} from "../config";
+import axios from "axios";
+import { API_URL } from "../config";
+import ImageUploader from "../components/ImageUploader";
 
 const LostItemForm = () => {
   const auth = useContext(AuthContext);
@@ -42,21 +42,8 @@ const LostItemForm = () => {
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState("");
   const [image, setImage] = useState(null);
 
-  //Pick image from gallery
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log("Result---", result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
+  const pickImage = (img) => {
+    setImage(img);
   };
 
   const handleSubmit = async () => {
@@ -109,25 +96,25 @@ const LostItemForm = () => {
       return;
     } else {
       try {
+        let formData = new FormData();
+        formData.append("name", name);
+        formData.append("itemname", itemName);
+        formData.append("state", state);
+        formData.append("lostitemtype", lostItem);
+        formData.append("color", color);
+        formData.append("location", location);
+        formData.append("details", details);
+        formData.append("description", description);
+        formData.append("images", image);
+        formData.append("creator", auth.userId);
         const response = await axios({
           method: "post",
           url: `${API_URL.localhost}/lost-report/reportform`,
-          data: {
-            name: name,
-            itemname: itemName,
-            state: state,
-            lostitemtype: lostItem,
-            color: color,
-            location: location,
-            details: details,
-            description: description,
-            images: image,
-            creator: auth.userId,
-          },
+          data: formData,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + auth.token,
-          },
+            Authorization: "Bearer " + auth.token
+          }
         });
         console.log("Response---", response);
         if (response.status === 201) {
@@ -302,11 +289,7 @@ const LostItemForm = () => {
         error={descriptionError ? <Text>{descriptionErrorMsg}</Text> : null}
       />
 
-      <View>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-        {image && <Image source={{ uri: image }} style={styles.imageStyle} />}
-        {!image && <Text style={styles.error}>Image must be choose</Text>}
-      </View>
+      <ImageUploader func={pickImage} />
 
       <Button title="Submit" onPress={handleSubmit} />
     </ScrollView>
@@ -318,7 +301,7 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 70,
     marginVertical: 10,
-    marginLeft: 15,
+    marginLeft: 15
   },
   picker: {
     flex: 1,
@@ -326,19 +309,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "grey",
     borderRadius: 5,
-    paddingLeft: 10,
+    paddingLeft: 10
   },
   imageStyle: {
     width: 300,
     height: 200,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   error: {
     color: "red",
     fontSize: 15,
     marginTop: 3,
-    textAlign: "center",
-  },
+    textAlign: "center"
+  }
 });
 
 export default LostItemForm;

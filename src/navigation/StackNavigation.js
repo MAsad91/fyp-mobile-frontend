@@ -28,9 +28,12 @@ import DeleteUserAccount from "../components/DeleteUserAccount";
 const StackNavigation = () => {
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{ headerShown: true }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="CrimeReportForm" component={CrimeReportForm} />
-      <Stack.Screen name="CrimeReportEditForm" component={CrimeReportEditForm} />
+      <Stack.Screen
+        name="CrimeReportEditForm"
+        component={CrimeReportEditForm}
+      />
       <Stack.Screen name="SafelifeForm" component={SafeLifeReportForm} />
       <Stack.Screen name="SafelifeEditForm" component={SafeLifeEditForm} />
       <Stack.Screen name="LostItemForm" component={LostItemForm} />
@@ -41,10 +44,7 @@ const StackNavigation = () => {
         name="CommunityServicesForm"
         component={CommunityServicesForm}
       />
-      <Stack.Screen
-        name="ServicesEditForm"
-        component={CommunityEditForm}
-      />
+      <Stack.Screen name="ServicesEditForm" component={CommunityEditForm} />
       <Stack.Screen name="Certificate&Permit" component={RequestForm} />
       <Stack.Screen name="Certificate&PermitEdit" component={RequestEditForm} />
 
@@ -52,7 +52,6 @@ const StackNavigation = () => {
       <Stack.Screen name="ChangeUserPassword" component={ChangeUserPassword} />
       <Stack.Screen name="DeleteUserAccount" component={DeleteUserAccount} />
     </Stack.Navigator>
-    
   );
 };
 

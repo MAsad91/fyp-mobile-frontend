@@ -10,6 +10,8 @@ import {
   StatusBar,
   Modal,
   Image,
+  Animated, 
+  scrollX
 } from "react-native";
 import {
   Card,
@@ -39,6 +41,7 @@ const CrimeReportList = ({
   location,
   image,
 }) => {
+  let test;
   const [state, setState] = useState(0);
   console.log(crimetype);
   console.log(details);
@@ -72,6 +75,14 @@ const CrimeReportList = ({
   //     setState(slide);
   //   }
   // } 
+  const handleScroll = (event) => {
+    const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+    console.log(slide);
+    if(slide!==state){
+      setState(slide);
+    }
+    // console.log("test",test);
+  };
 
   return (
     <View style={styles.list}>
@@ -79,12 +90,17 @@ const CrimeReportList = ({
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          // onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: 
+          //   scrollX } } }], {listener: (event) => handleScroll(event)})}
+            // scrollEventThrottle={16}
           // onScroll={changeText}
           pagingEnabled={true}
           style={styles.scrollView}
         >
           {images.map((img, index) => (
             <CardImage
+              test = {index}
               key={index}
               source={{ uri: img }}
               style={styles.cardImage}
@@ -155,10 +171,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   pagingtext: { 
+    fontSize:25,
     color: "#888", 
     marginLeft: 10 
   },
   pagingActivetext: { 
+    fontSize:25,
     color: "#fff", 
     marginLeft: 10 
   },

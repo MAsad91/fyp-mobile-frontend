@@ -93,6 +93,15 @@ const LostItemReport = ({
     }
   };
 
+  const handleScroll = (event) => {
+    const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+    console.log(slide);
+    if(slide!==stateAction){
+      setStateAction(slide);
+    }
+    // console.log("test",test);
+  };
+
   return (
     <View style={styles.list}>
       {auth.userId === creator && (
@@ -100,7 +109,7 @@ const LostItemReport = ({
          <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          // onScroll={changeText}
+          onScroll={handleScroll}
           pagingEnabled={true}
           style={styles.scrollView}
         >
@@ -172,7 +181,7 @@ const LostItemReport = ({
            <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={true}
-          // onScroll={changeText}
+          onScroll={handleScroll}
           pagingEnabled={true}
           style={styles.scrollView}
         >
@@ -258,10 +267,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   pagingtext: { 
+    fontSize:25,
     color: "#888", 
     marginLeft: 10 
   },
   pagingActivetext: { 
+    fontSize:25,
     color: "#fff", 
     marginLeft: 10 
   },

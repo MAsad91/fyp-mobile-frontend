@@ -22,6 +22,7 @@ const SafeLifeReports = ({
   image,
 }) => {
 const [state, setState] = useState(0);
+const navigation = useNavigation();
   // const { width } = Dimensions.get("window");
 // const height = width *0.6;
 
@@ -49,14 +50,22 @@ const images = [
     }
   };
 
-  const navigation = useNavigation();
+  
+  const handleScroll = (event) => {
+    const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+    console.log(slide);
+    if(slide!==state){
+      setState(slide);
+    }
+    // console.log("test",test);
+  };
   return (
     <View style={styles.list}>
       <Card key={key} style={styles.cardStyle}>
       <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          // onScroll={changeText}
+          onScroll={handleScroll}
           pagingEnabled={true}
           style={styles.scrollView}
         >
@@ -75,9 +84,6 @@ const images = [
                 <Text key={k} style={k===state ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
               ))
             }
-            
-            {/* <Text style={styles.pagingtext}>⬤</Text> */}
-
           </View>
         {/* <CardImage source={{ uri: cardImage }} title="safelife image" /> */}
         <CardTitle title={reporttype} subtitle={`Details: ${details}`} />
@@ -130,7 +136,7 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: 310,
-    height: 250,
+    height: 230,
     resizeMode: "cover",
   },
   scrollView: {
@@ -138,17 +144,19 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   pagingtext: { 
+    fontSize: 25,
     color: "#888", 
     marginLeft: 10 
   },
   pagingActivetext: { 
+    fontSize: 25,
     color: "#fff", 
     marginLeft: 10 
   },
   pagination: {
     flexDirection: "row",
     position: "absolute",
-    bottom: 250,
+    bottom: 260,
     alignSelf: "center",
   },
 });

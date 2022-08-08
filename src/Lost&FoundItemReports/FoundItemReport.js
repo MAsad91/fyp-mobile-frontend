@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text, Button, ScrollView } from "react-native";
 import {
   Card,
   CardTitle,
@@ -27,6 +27,17 @@ const FoundItemReport = ({
   location,
   image,
 }) => {
+  const [userImage, setUserImage] = useState(null);
+  const [stateAction, setStateAction] = useState(0);
+
+// const { width } = Dimensions.get("window");
+// const height = width *0.6;
+
+const images = [
+  "https://images.pexels.com/photos/9320207/pexels-photo-9320207.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+  "https://images.pexels.com/photos/13009540/pexels-photo-13009540.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+  "https://images.pexels.com/photos/11869265/pexels-photo-11869265.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+];
 
   const pickImage = (img) => {
     setUserImage(img);
@@ -82,7 +93,29 @@ const FoundItemReport = ({
     <View style={styles.list}>
       {auth.userId === creator && (
         <Card key={key} style={styles.cardStyle}>
-          <CardImage source={{ uri: cardImage }} title="found Item image" />
+         <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          // onScroll={changeText}
+          pagingEnabled={true}
+          style={styles.scrollView}
+        >
+          {images.map((img, index) => (
+            <CardImage
+              key={index}
+              source={{ uri: img }}
+              style={styles.cardImage}
+            />
+          ))}
+          
+        </ScrollView>
+        <View style={styles.pagination}>
+            {images.map((i,k) => (
+                <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
+              ))
+            }
+          </View>
+          {/* <CardImage source={{ uri: cardImage }} title="found Item image" /> */}
           <CardTitle
             title={founditemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}
@@ -132,7 +165,29 @@ const FoundItemReport = ({
       )}
       {!(auth.userId === creator) && (
         <Card key={key} style={styles.cardStyle}>
-          <CardImage src={{ uri: image }} title="found Item image" />
+          <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          // onScroll={changeText}
+          pagingEnabled={true}
+          style={styles.scrollView}
+        >
+          {images.map((img, index) => (
+            <CardImage
+              key={index}
+              source={{ uri: img }}
+              style={styles.cardImage}
+            />
+          ))}
+          
+        </ScrollView>
+        <View style={styles.pagination}>
+            {images.map((i,k) => (
+                <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
+              ))
+            }
+          </View>
+          {/* <CardImage src={{ uri: image }} title="found Item image" /> */}
           <CardTitle
             title={founditemtype}
             subtitle={`Details: ${details}\n\nDescription: ${description}`}
@@ -149,16 +204,6 @@ const FoundItemReport = ({
           <CardContent text={`Report Name: ${name}`} />
 
           <CardAction separator={true} inColumn={false}>
-            {/* <CardButton
-                onPress={() => {}}
-                title="Edit"
-                color="black"
-              /> */}
-            {/* <CardButton
-                onPress={() => {}}
-                title="Delete"
-                color="red"
-              /> */}
           </CardAction>
           <Text style={styles.text}>Upload found Item Image You found</Text>
           <View style={styles.imageStyle}>
@@ -193,26 +238,37 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 10,
   },
-  title: {
-    // color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
+
   text: {
     paddingTop: 10,
     paddingHorizontal: 23,
-    // color: "white",
     fontSize: 16,
     marginBottom: 10,
   },
-  count: {
-    // color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlignVertical: "center",
+  cardImage: {
+    width: 310,
+    height: 230,
+    resizeMode: "cover",
+  },
+  scrollView: {
+    width: "100%",
+    height: "100%",
+  },
+  pagingtext: { 
+    color: "#888", 
+    marginLeft: 10 
+  },
+  pagingActivetext: { 
+    color: "#fff", 
+    marginLeft: 10 
+  },
+  pagination: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 480,
+    alignSelf: "center",
   },
   imageStyle: {
-    // padding: 10,
     paddingHorizontal: 60,
   },
 });

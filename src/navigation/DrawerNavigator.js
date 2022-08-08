@@ -24,7 +24,10 @@ const DrawerNavigator = () => {
     <Drawer.Navigator
       initialRouteName="Home"
       screenOptions={{ headerShown: true }}
+      
+
     >
+      
       <Drawer.Screen
         name="Main"
         component={StackNavigation}

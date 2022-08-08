@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useComponentSize } from "react";
 
 import { useNavigation /*useParams*/ } from "@react-navigation/native";
 import {
@@ -9,7 +9,7 @@ import {
   Dimensions,
   StatusBar,
   Modal,
-  Image
+  Image,
 } from "react-native";
 import {
   Card,
@@ -17,12 +17,13 @@ import {
   CardContent,
   CardAction,
   CardButton,
-  CardImage
+  CardImage,
 } from "react-native-material-cards";
 import axios from "axios";
 import { API_URL } from "../config";
-// const { width } = Dimensions.get("window")+300;
-// const height = width *0.78;
+
+// const { width } = Dimensions.get("window");
+// const height = width *0.6;
 
 const images = [
   "https://images.pexels.com/photos/9320207/pexels-photo-9320207.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
@@ -36,8 +37,9 @@ const CrimeReportList = ({
   details,
   name,
   location,
-  image
+  image,
 }) => {
+  const [state, setState] = useState(0);
   console.log(crimetype);
   console.log(details);
   console.log(id);
@@ -59,20 +61,42 @@ const CrimeReportList = ({
       alert("Deleted successfully", response.status);
     }
   };
+  
+  // const changeText = (event) => {
+  //   console.log(event.nativeEvent.contentOffSet.x);
+    
+  //   const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width); 
+  //   // // const slide = Math.ceil(nativeEvent.contentOff.x / nativeEvent.layoutMeasurement.width);
+  //   console.log(slide);
+  //   if(slide !== state){
+  //     setState(slide);
+  //   }
+  // } 
 
   return (
     <View style={styles.list}>
       <Card style={styles.cardStyle}>
-      <ScrollView  horizontal style={ styles.cardImage }>
-          {images.map((img, index) =>(
-              <CardImage
-                key={index}
-                source={{ uri: img }}
-                // style={{ width: "100%", height: 300, resizeMode: "contain" }}
-              />
-            
-         ) )}
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          // onScroll={changeText}
+          pagingEnabled={true}
+          style={styles.scrollView}
+        >
+          {images.map((img, index) => (
+            <CardImage
+              key={index}
+              source={{ uri: img }}
+              style={styles.cardImage}
+            />
+          ))}
         </ScrollView>
+        <View style={styles.pagination}>
+            {images.map((i,k) => (
+                <Text key={k} style={k===state ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
+              ))
+            }
+          </View>
         {/* <CardImage source={{ uri: cardImage }} title="crime image" /> */}
         <CardTitle title={crimetype} subtitle={`Details: ${details}`} />
         <CardContent />
@@ -84,7 +108,7 @@ const CrimeReportList = ({
             onPress={() => {
               navigation.navigate("Main", {
                 screen: "CrimeReportEditForm",
-                params: id
+                params: id,
               });
             }}
             title="Edit"
@@ -103,12 +127,6 @@ const CrimeReportList = ({
   );
 };
 
-// const w=Dimensions.get('window').width ;
-// // const h=(Dimensions.get('window').height)-(StatusBar.currentHeight) ;
-// const h = Dimensions.get("screen").height-(StatusBar.currentHeight);
-// console.log("height",h);
-// console.log('ch', StatusBar.currentHeight);
-
 const styles = StyleSheet.create({
   list: {
     flex: 1,
@@ -125,30 +143,31 @@ const styles = StyleSheet.create({
     padding: 1,
     marginVertical: 12,
     marginLeft: 15,
-    marginTop: 10
-  },
-  title: {
-    // color: "white",
-    fontSize: 20,
-    fontWeight: "bold"
-  },
-  text: {
-    // color: "white",
-    fontSize: 15
-  },
-  count: {
-    // color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlignVertical: "center"
+    marginTop: 10,
   },
   cardImage: {
-    width:"100%",
-    height:"100%",
-  }
-  // cardStyle:{
-  //   flex:1,
-  // }
+    width: 310,
+    height: 250,
+    resizeMode: "cover",
+  },
+  scrollView: {
+    width: "100%",
+    height: "100%",
+  },
+  pagingtext: { 
+    color: "#888", 
+    marginLeft: 10 
+  },
+  pagingActivetext: { 
+    color: "#fff", 
+    marginLeft: 10 
+  },
+  pagination: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 250,
+    alignSelf: "center",
+  },
 });
 
 export default CrimeReportList;

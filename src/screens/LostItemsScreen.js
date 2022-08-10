@@ -37,6 +37,7 @@ const LostItemsScreen = () => {
     };
     fetchlostData();
   }, [render]);
+  console.log(lostItemReport)
   return (
     <View style={styles.container}>
       <ScrollView
@@ -48,7 +49,7 @@ const LostItemsScreen = () => {
         {lostItemReport.map((user) => {
           return (
             <LostItemReport
-              key={user._id}
+              key={user.id}
               creator={user.creator}
               id={user._id}
               lostitemtype={user.lostitemtype}

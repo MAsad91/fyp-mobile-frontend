@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, Button, ScrollView } from "react-native";
+import { View, StyleSheet, Text, Button, ScrollView,Alert } from "react-native";
 import {
   Card,
   CardTitle,
@@ -41,7 +41,7 @@ const images = [
 
   const pickImage = (img) => {
     setUserImage(img);
-    handleSubmit();
+    // handleSubmit();
   };
   const handleSubmit = async () => {
     console.log("data to be submitted",userImage, itemname, creator,id)
@@ -78,6 +78,29 @@ const images = [
   const cardImage = image[0];
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
+
+  const ReturnModal = () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            onDeleteUsers(id);
+            // navigation.navigate("Crime");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const onDeleteUsers = async (id) => {
     
@@ -142,15 +165,6 @@ const images = [
 
           <CardAction separator={true} />
 
-          <Text style={styles.text}>Upload found Item Image You found</Text>
-          <View style={styles.imageStyle}>
-          <ImageUploader func={pickImage} />
-            {/* <Button
-              title="Pick Image on Roll Camera"
-              color="black"
-              onPress={() => {}}
-            /> */}
-          </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
               onPress={() => {
@@ -164,7 +178,7 @@ const images = [
             />
             <CardButton
               onPress={() => {
-                onDeleteUsers(id);
+                ReturnModal();
               }}
               title="Delete"
               color="red"
@@ -222,6 +236,16 @@ const images = [
               color="black"
               onPress={() => {}}
             /> */}
+          </View>
+          <CardAction separator={true} />
+          <View style={styles.submitbutton}>
+            <Button
+              title="submit"
+              color={"black"}
+              onPress={() => {
+                handleSubmit();
+              }}
+            ></Button>
           </View>
         </Card>
       )}
@@ -281,6 +305,10 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     paddingHorizontal: 60,
+  },
+  submitbutton: {
+    margin: 10,
+    paddingHorizontal: 100,
   },
 });
 

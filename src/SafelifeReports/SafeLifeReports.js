@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/auth-context";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
 import {
   Card,
   CardTitle,
@@ -32,7 +32,31 @@ const images = [
   "https://images.pexels.com/photos/11869265/pexels-photo-11869265.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
 ];
 
-  const cardImage = image[0];
+  // const cardImage = image[0];
+
+  const ReturnModal = () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            onDeleteUsers(id);
+            // navigation.navigate("Crime");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const auth = useContext(AuthContext);
   const onDeleteUsers = async (id) => {
     // const creator = auth.userId;
@@ -105,7 +129,7 @@ const images = [
           />
           <CardButton
             onPress={() => {
-              onDeleteUsers(id);
+              ReturnModal();
             }}
             title="Delete"
             color="red"

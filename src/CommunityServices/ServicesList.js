@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import {
   Card,
   CardTitle,
@@ -13,6 +13,29 @@ import axios from "axios";
 import {API_URL} from "../config";
 const ServicesList = ({key, id, name, servicetype, details }) => {
   const navigation = useNavigation();
+
+  const ReturnModal = () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            onDeleteUsers(id);
+            // navigation.navigate("Crime");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
@@ -44,7 +67,7 @@ const ServicesList = ({key, id, name, servicetype, details }) => {
           />
           <CardButton
             onPress={() => {
-              onDeleteUsers(id);
+              ReturnModal();
             }}
             title="Delete"
             color="red"

@@ -20,6 +20,8 @@ const CrimeReportsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [render, setRender] = useState(false);
 
+
+
   const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -67,7 +69,7 @@ const CrimeReportsScreen = () => {
               image={user.images.map((img) => {
                 console.log(`IMG:::::${img}`);
                 // return `${API_URL.localhost}/` + img;
-                return `https://safecityservices.herokuapp.com/` + img;
+                return `${API_URL.localhost}` + img;
               })}
             />
           );

@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Text, Button, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  ScrollView,
+  Alert,
+} from "react-native";
 import {
   Card,
   CardTitle,
@@ -31,7 +38,7 @@ const LostItemReport = ({
 }) => {
   const [userImage, setUserImage] = useState(null);
   const [stateAction, setStateAction] = useState(0);
-
+  console.log("key", key);
   // const { width } = Dimensions.get("window");
   // const height = width *0.6;
 
@@ -43,7 +50,7 @@ const LostItemReport = ({
 
   const pickImage = (img) => {
     setUserImage(img);
-    handleSubmit();
+    // handleSubmit();
   };
   const handleSubmit = async () => {
     console.log("data to be submitted", userImage, itemname, creator, id);
@@ -84,6 +91,29 @@ const LostItemReport = ({
   // console.log(id);
   const navigation = useNavigation();
 
+  const ReturnModal = () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            onDeleteUsers(id);
+            // navigation.navigate("Crime");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const onDeleteUsers = async (id) => {
     const response = await axios.delete(
       `${API_URL.localhost}/lost-report/${id}`
@@ -94,9 +124,12 @@ const LostItemReport = ({
   };
 
   const handleScroll = (event) => {
-    const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+    const slide = Math.ceil(
+      event.nativeEvent.contentOffset.x /
+        event.nativeEvent.layoutMeasurement.width
+    );
     console.log(slide);
-    if(slide!==stateAction){
+    if (slide !== stateAction) {
       setStateAction(slide);
     }
     // console.log("test",test);
@@ -106,28 +139,35 @@ const LostItemReport = ({
     <View style={styles.list}>
       {auth.userId === creator && (
         <Card key={key} style={styles.cardStyle}>
-         <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          pagingEnabled={true}
-          style={styles.scrollView}
-        >
-          {images.map((img, index) => (
-            <CardImage
-              key={index}
-              source={{ uri: img }}
-              style={styles.cardImage}
-            />
-          ))}
-          
-        </ScrollView>
-        <View style={styles.pagination}>
-            {images.map((i,k) => (
-                <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
-              ))
-            }
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleScroll}
+            pagingEnabled={true}
+            style={styles.scrollView}
+          >
+            {images.map((img, index) => (
+              <CardImage
+                // key={index}
+                source={{ uri: img }}
+                style={styles.cardImage}
+              />
+            ))}
+          </ScrollView>
+          <View style={styles.pagination}>
+            {images.map((i, k) => (
+              <Text
+                style={
+                  k === stateAction
+                    ? styles.pagingActivetext
+                    : styles.pagingtext
+                }
+              >
+                ⬤
+              </Text>
+            ))}
           </View>
+          <CardAction separator={true} />
           {/* <CardImage source={{ uri: cardImage }} title="Lost Item image" /> */}
           <CardTitle
             title={lostitemtype}
@@ -144,17 +184,6 @@ const LostItemReport = ({
 
           <CardContent text={`Report Name: ${name}`} />
 
-          <CardAction separator={true} />
-
-          <Text style={styles.text}>Upload Lost Item Image You found</Text>
-          <View style={styles.imageStyle}>
-            <ImageUploader func={pickImage} />
-            {/* <Button
-              title="Pick Image on Roll Camera"
-              color="black"
-              onPress={() => {}}
-            /> */}
-          </View>
           <CardAction separator={true} inColumn={false}>
             <CardButton
               onPress={() => {
@@ -168,7 +197,7 @@ const LostItemReport = ({
             />
             <CardButton
               onPress={() => {
-                onDeleteUsers(id);
+                ReturnModal();
               }}
               title="Delete"
               color="red"
@@ -178,32 +207,39 @@ const LostItemReport = ({
       )}
       {!(auth.userId === creator) && (
         <Card key={key} style={styles.cardStyle}>
-           <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={true}
-          onScroll={handleScroll}
-          pagingEnabled={true}
-          style={styles.scrollView}
-        >
-          {images.map((img, index) => (
-            <CardImage
-              key={index}
-              source={{ uri: img }}
-              style={styles.cardImage}
-            />
-          ))}
-          
-        </ScrollView>
-        <View style={styles.pagination}>
-            {images.map((i,k) => (
-                <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
-              ))
-            }
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={true}
+            onScroll={handleScroll}
+            pagingEnabled={true}
+            style={styles.scrollView}
+          >
+            {images.map((img, index) => (
+              <CardImage
+                // key={index}
+                source={{ uri: img }}
+                style={styles.cardImage}
+              />
+            ))}
+          </ScrollView>
+          <View style={styles.pagination}>
+            {images.map((i, k) => (
+              <Text
+                style={
+                  k === stateAction
+                    ? styles.pagingActivetext
+                    : styles.pagingtext
+                }
+              >
+                ⬤
+              </Text>
+            ))}
           </View>
+          {/* <CardAction separator={true} /> */}
           {/* <CardImage src={{ uri: image }} title="crime image" /> */}
           <CardTitle
             title={lostitemtype}
-            subtitle={`Details: ${details}\n\nDescription: ${description}`}
+            subtitle={`Details: ${details}\n\n\nDescription: ${description}`}
           />
           <CardAction separator={true} />
           <CardContent text={`\nItem Name: ${itemname}`} />
@@ -226,6 +262,16 @@ const LostItemReport = ({
               color="black"
               onPress={() => {}}
             /> */}
+          </View>
+          <CardAction separator={true} />
+          <View style={styles.submitbutton}>
+            <Button
+              title="submit"
+              color={"black"}
+              onPress={() => {
+                handleSubmit();
+              }}
+            ></Button>
           </View>
         </Card>
       )}
@@ -266,15 +312,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  pagingtext: { 
-    fontSize:25,
-    color: "#888", 
-    marginLeft: 10 
+  pagingtext: {
+    fontSize: 25,
+    color: "#888",
+    marginLeft: 10,
+    // position: "absolute"
   },
-  pagingActivetext: { 
-    fontSize:25,
-    color: "#fff", 
-    marginLeft: 10 
+  pagingActivetext: {
+    fontSize: 25,
+    color: "#fff",
+    marginLeft: 10,
+    // position: "absolute"
   },
   pagination: {
     flexDirection: "row",
@@ -287,6 +335,10 @@ const styles = StyleSheet.create({
     // margin:20,
     // padding: 20,
     paddingHorizontal: 60,
+  },
+  submitbutton: {
+    margin: 10,
+    paddingHorizontal: 100,
   },
 });
 

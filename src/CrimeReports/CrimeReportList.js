@@ -7,11 +7,7 @@ import {
   Text,
   ScrollView,
   Dimensions,
-  StatusBar,
-  Modal,
-  Image,
-  Animated, 
-  scrollX
+  Alert
 } from "react-native";
 import {
   Card,
@@ -41,7 +37,6 @@ const CrimeReportList = ({
   location,
   image,
 }) => {
-  let test;
   const [state, setState] = useState(0);
   console.log(crimetype);
   console.log(details);
@@ -52,6 +47,30 @@ const CrimeReportList = ({
   console.log(cardImage);
 
   const navigation = useNavigation();
+
+  
+  const ReturnModal = () => {
+    Alert.alert(
+      "Delete",
+      "Do you want to delete?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: "Confirm",
+          onPress: () => {
+            onDeleteUsers(id);
+            // navigation.navigate("Crime");
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const onDeleteUsers = async (id) => {
     console.log("id", id);
@@ -64,24 +83,13 @@ const CrimeReportList = ({
       alert("Deleted successfully", response.status);
     }
   };
-  
-  // const changeText = (event) => {
-  //   console.log(event.nativeEvent.contentOffSet.x);
-    
-  //   const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width); 
-  //   // // const slide = Math.ceil(nativeEvent.contentOff.x / nativeEvent.layoutMeasurement.width);
-  //   console.log(slide);
-  //   if(slide !== state){
-  //     setState(slide);
-  //   }
-  // } 
+   
   const handleScroll = (event) => {
     const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
     console.log(slide);
     if(slide!==state){
       setState(slide);
     }
-    // console.log("test",test);
   };
 
   return (
@@ -91,10 +99,6 @@ const CrimeReportList = ({
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           onScroll={handleScroll}
-          // onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: 
-          //   scrollX } } }], {listener: (event) => handleScroll(event)})}
-            // scrollEventThrottle={16}
-          // onScroll={changeText}
           pagingEnabled={true}
           style={styles.scrollView}
         >
@@ -132,7 +136,7 @@ const CrimeReportList = ({
           />
           <CardButton
             onPress={() => {
-              onDeleteUsers(id);
+              ReturnModal();
             }}
             title="Delete"
             color="red"

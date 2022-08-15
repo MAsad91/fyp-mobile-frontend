@@ -55,7 +55,7 @@ const EventsScreen = () => {
               location={user.location}
               name={user.name}
               image={user.images.map((img) => {
-                return `https://safecityservices.herokuapp.com/` + img;
+                return `${API_URL.localhost}/` + img;
               })}
             />
           );

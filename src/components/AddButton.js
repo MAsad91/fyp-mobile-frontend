@@ -4,7 +4,7 @@ import { View, StyleSheet, Button } from "react-native";
 const AddButton = ({ onPress }) => {
   return (
     <View style={styles.button}>
-      <Button title="Add Report" color="black" onPress={onPress} />
+      <Button  title="Add Report" color="black" onPress={onPress} />
     </View>
   );
 };

@@ -69,7 +69,7 @@ const CrimeReportsScreen = () => {
               image={user.images.map((img) => {
                 console.log(`IMG:::::${img}`);
                 // return `${API_URL.localhost}/` + img;
-                return `${API_URL.localhost}` + img;
+                return `${API_URL.localhost}/` + img;
               })}
             />
           );

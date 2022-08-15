@@ -63,6 +63,7 @@ const images = [
         },
       });
       console.log(response);
+      setUserImage(null);
       let result = response.data.result;
       alert("Image Comparison Result", result);
       if (response.status === 201) {
@@ -132,7 +133,7 @@ const images = [
           pagingEnabled={true}
           style={styles.scrollView}
         >
-          {images.map((img, index) => (
+          {image.map((img, index) => (
             <CardImage
               key={index}
               source={{ uri: img }}
@@ -142,7 +143,7 @@ const images = [
           
         </ScrollView>
         <View style={styles.pagination}>
-            {images.map((i,k) => (
+            {image.map((i,k) => (
                 <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
               ))
             }
@@ -195,7 +196,7 @@ const images = [
           pagingEnabled={true}
           style={styles.scrollView}
         >
-          {images.map((img, index) => (
+          {image.map((img, index) => (
             <CardImage
               key={index}
               source={{ uri: img }}
@@ -205,7 +206,7 @@ const images = [
           
         </ScrollView>
         <View style={styles.pagination}>
-            {images.map((i,k) => (
+            {image.map((i,k) => (
                 <Text key={k} style={k===stateAction ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
               ))
             }
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: 310,
     height: 230,
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   scrollView: {
     width: "100%",
@@ -300,7 +301,7 @@ const styles = StyleSheet.create({
   pagination: {
     flexDirection: "row",
     position: "absolute",
-    bottom: 480,
+    top:190,
     alignSelf: "center",
   },
   imageStyle: {

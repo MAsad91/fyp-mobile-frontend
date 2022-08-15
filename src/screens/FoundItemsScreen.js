@@ -65,7 +65,7 @@ const FoundItemsScreen = () => {
               location={user.location}
               image={user.images.map((img) => {
                 console.log(`IMG:::::${img}`);
-                return `https://safecityservices.herokuapp.com/` + img;
+                return `${API_URL.localhost}/` + img;
               })}
             />
           );

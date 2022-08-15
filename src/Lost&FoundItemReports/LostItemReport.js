@@ -38,7 +38,7 @@ const LostItemReport = ({
 }) => {
   const [userImage, setUserImage] = useState(null);
   const [stateAction, setStateAction] = useState(0);
-  console.log("key", key);
+  // console.log("key", key);
   // const { width } = Dimensions.get("window");
   // const height = width *0.6;
 
@@ -50,15 +50,11 @@ const LostItemReport = ({
 
   const pickImage = (img) => {
     setUserImage(img);
-    // handleSubmit();
   };
   const handleSubmit = async () => {
     console.log("data to be submitted", userImage, itemname, creator, id);
     try {
       let formData = new FormData();
-      // image.map((image) => {
-      //   formData.append("images", image.originFileObj);
-      // });
       formData.append("images", userImage);
       formData.append("itemname", itemname);
       formData.append("creator", creator);
@@ -73,10 +69,10 @@ const LostItemReport = ({
       });
       console.log(response);
       let result = response.data.result;
-      alert("Image Comparison Result", result);
+      console.log("result-----",result);
+      alert(result);
       if (response.status === 201) {
         alert("Lost Item Image Uploaded Successfully!");
-        setUserImage(null);
       }
     } catch (err) {
       alert(
@@ -85,10 +81,7 @@ const LostItemReport = ({
     }
   };
 
-  const cardImage = image[0];
   const auth = useContext(AuthContext);
-  // console.log(auth.userId);
-  // console.log(id);
   const navigation = useNavigation();
 
   const ReturnModal = () => {
@@ -138,7 +131,7 @@ const LostItemReport = ({
   return (
     <View style={styles.list}>
       {auth.userId === creator && (
-        <Card key={key} style={styles.cardStyle}>
+        <Card style={styles.cardStyle}>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -146,7 +139,7 @@ const LostItemReport = ({
             pagingEnabled={true}
             style={styles.scrollView}
           >
-            {images.map((img, index) => (
+            {image.map((img, index) => (
               <CardImage
                 // key={index}
                 source={{ uri: img }}
@@ -155,7 +148,7 @@ const LostItemReport = ({
             ))}
           </ScrollView>
           <View style={styles.pagination}>
-            {images.map((i, k) => (
+            {image.map((i, k) => (
               <Text
                 style={
                   k === stateAction
@@ -206,7 +199,7 @@ const LostItemReport = ({
         </Card>
       )}
       {!(auth.userId === creator) && (
-        <Card key={key} style={styles.cardStyle}>
+        <Card  style={styles.cardStyle}>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={true}
@@ -214,7 +207,7 @@ const LostItemReport = ({
             pagingEnabled={true}
             style={styles.scrollView}
           >
-            {images.map((img, index) => (
+            {image.map((img, index) => (
               <CardImage
                 // key={index}
                 source={{ uri: img }}
@@ -223,7 +216,7 @@ const LostItemReport = ({
             ))}
           </ScrollView>
           <View style={styles.pagination}>
-            {images.map((i, k) => (
+            {image.map((i, k) => (
               <Text
                 style={
                   k === stateAction
@@ -266,7 +259,8 @@ const LostItemReport = ({
           <CardAction separator={true} />
           <View style={styles.submitbutton}>
             <Button
-              title="submit"
+
+              title=" Submit  "
               color={"black"}
               onPress={() => {
                 handleSubmit();
@@ -306,7 +300,7 @@ const styles = StyleSheet.create({
   cardImage: {
     width: 310,
     height: 230,
-    resizeMode: "cover",
+    resizeMode: "contain",
   },
   scrollView: {
     width: "100%",
@@ -315,19 +309,19 @@ const styles = StyleSheet.create({
   pagingtext: {
     fontSize: 25,
     color: "#888",
-    marginLeft: 10,
+    // marginLeft: 10,
     // position: "absolute"
   },
   pagingActivetext: {
     fontSize: 25,
     color: "#fff",
-    marginLeft: 10,
+    // marginLeft: 10,
     // position: "absolute"
   },
   pagination: {
     flexDirection: "row",
     position: "absolute",
-    bottom: 480,
+    top:190,
     alignSelf: "center",
   },
   imageStyle: {

@@ -29,7 +29,7 @@ const images = [
   "https://images.pexels.com/photos/11869265/pexels-photo-11869265.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
 ];
 const CrimeReportList = ({
-  key,
+  // key,
   id,
   crimetype,
   details,
@@ -102,9 +102,8 @@ const CrimeReportList = ({
           pagingEnabled={true}
           style={styles.scrollView}
         >
-          {images.map((img, index) => (
+          {image.map((img, index) => (
             <CardImage
-              test = {index}
               key={index}
               source={{ uri: img }}
               style={styles.cardImage}
@@ -112,7 +111,7 @@ const CrimeReportList = ({
           ))}
         </ScrollView>
         <View style={styles.pagination}>
-            {images.map((i,k) => (
+            {image.map((i,k) => (
                 <Text key={k} style={k===state ? styles.pagingActivetext : styles.pagingtext}>⬤</Text>
               ))
             }
@@ -167,8 +166,8 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: 310,
-    height: 250,
-    resizeMode: "cover",
+    height: 230,
+    resizeMode: "contain",
   },
   scrollView: {
     width: "100%",
@@ -187,7 +186,7 @@ const styles = StyleSheet.create({
   pagination: {
     flexDirection: "row",
     position: "absolute",
-    bottom: 250,
+    top:190,
     alignSelf: "center",
   },
 });

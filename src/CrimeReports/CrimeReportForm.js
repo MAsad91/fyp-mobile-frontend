@@ -85,7 +85,7 @@ const CrimeReportForm = () => {
           setName("");
           setDetails("");
           setLocation("");
-          setImage();
+          setImage(null);
         }
       } catch (error) {
         console.log(error.response.data.message);

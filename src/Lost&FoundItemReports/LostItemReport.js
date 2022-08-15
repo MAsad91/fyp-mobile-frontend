@@ -70,9 +70,10 @@ const LostItemReport = ({
       console.log(response);
       let result = response.data.result;
       console.log("result-----",result);
-      alert(result);
+      
       if (response.status === 201) {
         alert("Lost Item Image Uploaded Successfully!");
+        alert(result);
       }
     } catch (err) {
       alert(

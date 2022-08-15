@@ -114,7 +114,7 @@ const SafeLifeReportForm = () => {
       });
       console.log("Response---", response);
       if (response.status === 200) {
-        alert(`SafeLife Report is submitted Successfully!`);
+        alert(`SafeLife Report is Updated Successfully!`);
         navigation.navigate("SafeLife Reports");
         // setName("");
         // setDetails("");

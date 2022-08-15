@@ -9,26 +9,24 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import Label from "../components/Label";
 import axios from "axios";
-import {API_URL} from "../config";
+import { API_URL } from "../config";
 
 const CommunityServicesForm = () => {
-
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
-const [communityReport, setCommunityReport] = useState({});
+  const [communityReport, setCommunityReport] = useState({});
 
   const route = useRoute();
   const dataRequest = route.params;
-  let arrayData=[] ;
+  let arrayData = [];
   for (const value in dataRequest) {
     arrayData.push(dataRequest[value]);
     // console.log(`key=${value}: ${dataRequest[value]}`);
-    
   }
-  console.log("arrayData: ",arrayData.join(''));
-  const requestId = arrayData.join('');
+  console.log("arrayData: ", arrayData.join(""));
+  const requestId = arrayData.join("");
   // console.log(dataRequest);
-  console.log("id",requestId);
+  console.log("id", requestId);
 
   useEffect(() => {
     const LoadReportData = async () => {
@@ -42,7 +40,6 @@ const [communityReport, setCommunityReport] = useState({});
   }, []);
   console.log(communityReport.name);
 
-  
   const [request, setRequest] = useState(communityReport.servicetype);
   // const [requestError, setRequestError] = useState(false);
   // const [requestErrorMsg, setRequestErrorMsg] = useState("");
@@ -66,33 +63,33 @@ const [communityReport, setCommunityReport] = useState({});
     //   setRequestError(true);
     //   setRequestErrorMsg("Request type must be choose");
     //   return;
-    // } 
+    // }
     // else {
-      try {
-        const response = await axios({
-          method: "patch",
-          url: `${API_URL.localhost}/request-communityservices/requestform/${requestId}`,
-          data: {
-            name: name,
-            servicetype: request,
-            details: details,
-            // creator: auth.userId,
-          },
-          headers: {
-            // Authorization: "Bearer " + auth.token,
-          },
-        });
-        console.log("Response--", response);
-        if (response.status === 200) {
-          alert(`Request Submitted Successfully!`);
-          navigation.navigate("Community Services");
-          // setName("");
-          // setDetails("");
-          // setRequest("");
-        }
-      } catch (error) {
-        alert(error.response.data.message);
+    try {
+      const response = await axios({
+        method: "patch",
+        url: `${API_URL.localhost}/request-communityservices/requestform/${requestId}`,
+        data: {
+          name: name,
+          servicetype: request,
+          details: details,
+          // creator: auth.userId,
+        },
+        headers: {
+          // Authorization: "Bearer " + auth.token,
+        },
+      });
+      console.log("Response--", response);
+      if (response.status === 200) {
+        alert(`Request Updated Successfully!`);
+        navigation.navigate("Community Services");
+        // setName("");
+        // setDetails("");
+        // setRequest("");
       }
+    } catch (error) {
+      alert(error.response.data.message);
+    }
     // }
   };
 

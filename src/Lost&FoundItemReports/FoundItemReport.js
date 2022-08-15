@@ -59,16 +59,16 @@ const images = [
         url: `${API_URL.localhost}/found-report/founditemimage`,
         data: formData,
         headers: {
-          // "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       });
       console.log(response);
       setUserImage(null);
       let result = response.data.result;
-      alert("Image Comparison Result", result);
+     
       if (response.status === 201) {
         alert("found Item Image Uploaded Successfully!");
-        setUserImage(null);
+        alert(result);
       }
     } catch (err) {
       alert("Uploading found Item Image is Failed" || error.response.data.message);

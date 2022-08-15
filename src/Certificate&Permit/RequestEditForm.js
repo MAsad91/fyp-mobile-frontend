@@ -80,7 +80,7 @@ const RequestForm = () => {
         });
         console.log("Response--", response);
         if (response.status === 200) {
-          alert(`Request Submitted Successfully!`);
+          alert(`Request Updated Successfully!`);
           navigation.navigate("Certificate & Permit");
           setName("");
           setRequest("");

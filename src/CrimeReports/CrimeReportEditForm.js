@@ -130,7 +130,7 @@ const CrimeReportForm = () => {
         });
         console.log("Response---", response);
         if (response.status === 200) {
-          alert(`Crime Report is submitted Successfully!`);
+          alert(`Crime Report is Updated Successfully!`);
           navigation.navigate("Crime Reports");
           // setCrimeType("");
           // // setImage(null);

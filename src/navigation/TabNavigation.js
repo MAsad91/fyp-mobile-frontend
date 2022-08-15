@@ -47,7 +47,7 @@ const TabNavigation = () => {
         component={EventStackScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons name="calendar-clock" color={color} size={26} />
           ),
         }}
       />

@@ -141,7 +141,7 @@ const LostItemForm = () => {
       });
       console.log("Response---", response);
       if (response.status === 200) {
-        alert(`Lost Item Report is submitted successfully!`);
+        alert(`Lost Item Report is Updated successfully!`);
         navigation.navigate("LostItems Reports");
         setName("");
         setItemName("");

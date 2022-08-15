@@ -61,6 +61,8 @@ const CommunityServicesScreen = () => {
               name={user.name}
               servicetype={user.servicetype}
               details={user.details}
+              createdAt={user.createdAt}
+              updatedAt={user.updatedAt}
             />
           );
         })}

@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import {API_URL} from "../config";
 
-const CertificatePermitList = ({key, id, certificatetype, details, name }) => {
+const CertificatePermitList = ({key, id, certificatetype, details, name, createdAt, updatedAt }) => {
   const navigation = useNavigation();
 
   const ReturnModal = () => {
@@ -51,9 +51,16 @@ const CertificatePermitList = ({key, id, certificatetype, details, name }) => {
     <View style={styles.list}>
       <Card key={key} style={styles.cardStyle}>
         <CardTitle title={certificatetype} subtitle={`\nDetails: ${details}`} />
+
         <CardContent />
+
         <CardAction separator={true} />
+
         <CardContent text={`\nReporter Name: ${name}`} />
+
+        <CardContent text={`Created At: ${createdAt}`} />
+          
+        <CardContent text={`Updated At: ${updatedAt}`} />
 
         <CardAction separator={true} inColumn={false}>
           <CardButton

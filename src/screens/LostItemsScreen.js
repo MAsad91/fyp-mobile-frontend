@@ -64,6 +64,8 @@ const LostItemsScreen = () => {
                 console.log(`IMG:::::${img}`);
                 return `${API_URL.localhost}/` + img;
               })}
+              createdAt={user.createdAt}
+              updatedAt={user.updatedAt}
             />
           );
         })}

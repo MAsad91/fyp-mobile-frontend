@@ -3,23 +3,6 @@ import { View, Text, StyleSheet, Dimensions } from "react-native";
 import MapView, { PROVIDER_GOOGLE, useLoadScript, Marker } from "react-native-maps";
 
 const MapScreen = () => {
-  // const { isLoaded } = useLoadScript({
-  //   googleMapsApiKey: process.env.REACT_APP_NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-  // });
-
-  // if (!isLoaded) {
-  //   return <div className={styles.loading}>Loading........</div>;
-  // }
-
-  // const wait = (timeout) => {
-  //   return new Promise((resolve) => setTimeout(resolve, timeout));
-  // };
-
-  // const onRefresh = React.useCallback(() => {
-  //   setRefreshing(true);
-  //   setRender(true);
-  //   wait(2000).then(() => setRefreshing(false));
-  // }, []);
 
   const center = { lat: 33.6844, lng: 73.0479 };
   const latitude = 33.6844;
@@ -29,13 +12,10 @@ const MapScreen = () => {
 
   return (
     <View style={styles.container}
-    // refreshControl={
-    //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    // }
     >
       <MapView
         style={styles.map}
-        // center={center}
+        center={center}
         provider={PROVIDER_GOOGLE}
         zoom={10}
         initialRegion={{

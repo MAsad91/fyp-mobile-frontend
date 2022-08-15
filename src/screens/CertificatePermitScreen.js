@@ -61,6 +61,8 @@ const CertificatePermitScreen = () => {
               certificatetype={user.requesttype}
               details={user.details}
               name={user.name}
+              createdAt={user.createdAt}
+              updatedAt={user.updatedAt}
             />
           );
         })}

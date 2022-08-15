@@ -26,6 +26,8 @@ const FoundItemReport = ({
   itemname,
   location,
   image,
+  createdAt,
+  updatedAt,
 }) => {
   const [userImage, setUserImage] = useState(null);
   const [stateAction, setStateAction] = useState(0);
@@ -164,6 +166,10 @@ const images = [
 
           <CardContent text={`Report Name: ${name}`} />
 
+          <CardContent text={`Created At: ${createdAt}`} />
+          
+          <CardContent text={`Updated At: ${updatedAt}`} />
+
           <CardAction separator={true} />
 
           <CardAction separator={true} inColumn={false}>
@@ -226,6 +232,10 @@ const images = [
           <CardContent text={`Location: ${location}`} />
 
           <CardContent text={`Report Name: ${name}`} />
+
+          <CardContent text={`Created At: ${createdAt}`} />
+          
+          <CardContent text={`Updated At: ${updatedAt}`} />
 
           <CardAction separator={true} inColumn={false}>
           </CardAction>

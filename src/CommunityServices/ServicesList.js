@@ -11,7 +11,7 @@ import {
 } from "react-native-material-cards";
 import axios from "axios";
 import {API_URL} from "../config";
-const ServicesList = ({key, id, name, servicetype, details }) => {
+const ServicesList = ({key, id, name, servicetype, details, createdAt, updatedAt }) => {
   const navigation = useNavigation();
 
   const ReturnModal = () => {
@@ -50,9 +50,16 @@ const ServicesList = ({key, id, name, servicetype, details }) => {
     <View style={styles.list}>
       <Card key={key} style={styles.cardStyle}>
         <CardTitle title={servicetype} subtitle={`\nDetails: ${details}`} />
+
         <CardContent />
+
         <CardAction separator={true} />
+
         <CardContent text={`\nReporter Name: ${name}`} />
+
+        <CardContent text={`Created At: ${createdAt}`} />
+          
+        <CardContent text={`Updated At: ${updatedAt}`} />
 
         <CardAction separator={true} inColumn={false}>
           <CardButton

@@ -35,6 +35,8 @@ const LostItemReport = ({
   itemname,
   location,
   image,
+  createdAt,
+  updatedAt,
 }) => {
   const [userImage, setUserImage] = useState(null);
   const [stateAction, setStateAction] = useState(0);
@@ -177,6 +179,10 @@ const LostItemReport = ({
           <CardContent text={`Location: ${location}`} />
 
           <CardContent text={`Report Name: ${name}`} />
+          
+          <CardContent text={`Created At: ${createdAt}`} />
+          
+          <CardContent text={`Updated At: ${updatedAt}`} />
 
           <CardAction separator={true} inColumn={false}>
             <CardButton
@@ -245,6 +251,10 @@ const LostItemReport = ({
           <CardContent text={`Location: ${location}`} />
 
           <CardContent text={`Report Name: ${name}`} />
+          
+          <CardContent text={`Created At: ${createdAt}`} />
+          
+          <CardContent text={`Updated At: ${updatedAt}`} />
 
           <CardAction separator={true} />
           <Text style={styles.text}>Upload Lost Item Image You found</Text>

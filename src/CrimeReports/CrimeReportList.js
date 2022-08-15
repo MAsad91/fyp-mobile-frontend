@@ -36,6 +36,8 @@ const CrimeReportList = ({
   name,
   location,
   image,
+  createdAt,
+  updatedAt,
 }) => {
   const [state, setState] = useState(0);
   console.log(crimetype);
@@ -118,9 +120,16 @@ const CrimeReportList = ({
           </View>
         {/* <CardImage source={{ uri: cardImage }} title="crime image" /> */}
         <CardTitle title={crimetype} subtitle={`Details: ${details}`} />
+
         <CardContent />
+
         <CardContent text={`Reporter Name: ${name}`} />
+
         <CardContent text={`Location: ${location}`} />
+
+        <CardContent text={`Created At: ${createdAt}`} />
+          
+        <CardContent text={`Updated At: ${updatedAt}`} />
 
         <CardAction separator={true} inColumn={false}>
           <CardButton

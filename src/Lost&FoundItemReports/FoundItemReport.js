@@ -49,9 +49,6 @@ const images = [
     console.log("data to be submitted",userImage, itemname, creator,id)
     try {
       let formData = new FormData();
-      // image.map((image) => {
-      //   formData.append("images", image.originFileObj);
-      // });
       formData.append("images", userImage);
       formData.append("itemname", itemname);
       formData.append("creator", creator);

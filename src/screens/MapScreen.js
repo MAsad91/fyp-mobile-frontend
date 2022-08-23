@@ -28,8 +28,8 @@ const MapScreen = () => {
       >
         <MapView.Marker
             coordinate={{latitude: 33.6844, longitude: 73.0479,}}
-            title={"Title"}
-            description={"description"}
+            title={"Islamabad"}
+            description={"    center"}
          />
       </MapView>
       

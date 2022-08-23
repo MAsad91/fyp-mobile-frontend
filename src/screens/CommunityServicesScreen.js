@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Button
 } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
@@ -30,23 +31,33 @@ const CommunityServicesScreen = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const fetchServicesReport = async () => {
+    try {
+      const { data } = await axios.get(
+        `${API_URL.localhost}/request-communityservices/${auth.userId}`
+      );
+      setServicesList(data);
+      console.log("Data---: ", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchServicesReport = async () => {
-      try {
-        const { data } = await axios.get(
-          `${API_URL.localhost}/request-communityservices/${auth.userId}`
-        );
-        setServicesList(data);
-        console.log("Data---: ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
     fetchServicesReport();
   }, [render]);
   return (
     <View style={styles.container}>
+      <View style={styles.refreshbutton}>
+      <Button      
+              title="Tap to Refresh ↻ "
+              color="black"
+              onPress={() => {
+                fetchServicesReport();
+              }}
+      />
+      </View>
       <ScrollView
         style={styles.scrollview}
         refreshControl={
@@ -90,6 +101,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     backgroundColor: "white",
+  },
+  refreshbutton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white"
   },
   scrollview: {
     // backgroundColor: 'green',

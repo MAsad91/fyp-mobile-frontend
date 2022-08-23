@@ -27,10 +27,13 @@ const RequestForm = () => {
   const [detailsError, setDetailsError] = useState(false);
   const [detailsErrorMsg, setDetailsErrorMsg] = useState("");
 
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
+
   const handleSubmit = async () => {
-    if (name === "" && name.length < 3) {
+    if (name === "" && name.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters and must be in alphabets");
+      return;
     }
     if (details === "" && details.length < 20) {
       setDetailsError(true);
@@ -79,6 +82,9 @@ const RequestForm = () => {
           if (name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
+          } else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
           } else {
             setNameError(false);
           }

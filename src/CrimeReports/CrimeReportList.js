@@ -1,6 +1,6 @@
-import React, { useState, useComponentSize } from "react";
+import React, { useState, useComponentSize, useRoute } from "react";
 
-import { useNavigation /*useParams*/ } from "@react-navigation/native";
+import { useNavigation /*useParams*/,  } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -17,6 +17,7 @@ import {
   CardButton,
   CardImage,
 } from "react-native-material-cards";
+import CrimeReportsScreen from '../screens/CrimeReportsScreen';
 import axios from "axios";
 import { API_URL } from "../config";
 
@@ -39,6 +40,8 @@ const CrimeReportList = ({
   createdAt,
   updatedAt,
 }) => {
+  // const route = useRoute();
+  // console.log(route.fetchCrimeReports);
   const [state, setState] = useState(0);
   console.log(crimetype);
   console.log(details);
@@ -83,6 +86,10 @@ const CrimeReportList = ({
     if (response.status === 200) {
       console.log("userDeleted======>");
       alert("Deleted successfully", response.status);
+      // CrimeReportsScreen.fetchCrimeReports.bind();
+      // navigation.navigate("Main",{
+      //   screen: "Crime Reports"
+      // });
     }
   };
    

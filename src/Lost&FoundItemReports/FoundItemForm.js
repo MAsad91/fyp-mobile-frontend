@@ -40,6 +40,8 @@ const FoundItemForm = () => {
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState("");
   const [image, setImage] = useState();
 
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
+
   const pickImage = (img) => {
     setImage(img);
   };
@@ -57,21 +59,24 @@ const FoundItemForm = () => {
       image
     );
 
-    if (name === "" && name.length < 3) {
+    if (name === "" && name.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters and must be alphabets");
+      return;
     }
     if (itemName === "" && itemName.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state === "" && state.length < 3) {
+    if (state === "" && state.length < 3 || !state.match(nameRegex)) {
       setStateError(true);
-      setStateErrorMsg("Item State must have 3 or more characters");
+      setStateErrorMsg("Item State must have 3 or more characters and must be alphabets");
+      return;
     }
-    if (color === "" && color.length < 3) {
+    if (color === "" && color.length < 3 || !color.match(nameRegex)) {
       setColorError(true);
-      setColorErrorMsg("Item color must have 3 or more characters");
+      setColorErrorMsg("Item color must have 3 or more characters and must be alphabets");
+      return;
     }
     if (location === "" && location.length < 4) {
       setLocationError(true);
@@ -149,6 +154,9 @@ const FoundItemForm = () => {
           if (name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
+          } else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
           } else {
             setNameError(false);
           }
@@ -181,7 +189,11 @@ const FoundItemForm = () => {
           if (state.length < 3) {
             setStateError(true);
             setStateErrorMsg("Item State must have 3 or more characters");
-          } else {
+          } else if (!state.match(nameRegex)) {
+            setStateError(true);
+            setStateErrorMsg("state characters must be alphabet");
+          }
+           else {
             setStateError(false);
           }
         }}
@@ -233,6 +245,10 @@ const FoundItemForm = () => {
           if (color.length < 3) {
             setColorError(true);
             setColorErrorMsg("Item color must have 3 or more characters");
+          }
+          else if (!color.match(nameRegex)) {
+            setColorError(true);
+            setColorErrorMsg("color name must be alphabet");
           } else {
             setColorError(false);
           }

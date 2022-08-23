@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, RefreshControl } from "react-native";
+import { View, StyleSheet, Text, ScrollView, RefreshControl, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import {API_URL} from "../config";
@@ -22,24 +22,34 @@ const LostItemsScreen = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const fetchlostData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${API_URL.localhost}/lost-report/`
+      );
+      setLostItemReport(data);
+      console.log("Data--- ", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchlostData = async () => {
-      try {
-        const { data } = await axios.get(
-          `${API_URL.localhost}/lost-report/`
-        );
-        setLostItemReport(data);
-        console.log("Data--- ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
     fetchlostData();
   }, [render]);
   console.log(lostItemReport)
   return (
     <View style={styles.container}>
+      <View style={styles.refreshbutton}>
+      <Button      
+              title="Tap to Refresh ↻ "
+              color="black"
+              onPress={() => {
+                fetchlostData();
+              }}
+      />
+      </View>
       <ScrollView
         style={styles.scrollview}
         refreshControl={
@@ -89,6 +99,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     backgroundColor: "white",
+  },
+  refreshbutton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white"
   },
 });
 

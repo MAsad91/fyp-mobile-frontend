@@ -271,7 +271,7 @@ const LostItemReport = ({
           <View style={styles.submitbutton}>
             <Button
 
-              title=" Submit  "
+              title="    Submit    "
               color={"black"}
               onPress={() => {
                 handleSubmit();

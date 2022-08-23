@@ -15,11 +15,13 @@ import { API_URL } from "../config";
 const SignUpForm = () => {
   // const [value, setValue] = useState("");
   let regex = /[0]{1}[3]{1}[0-9]{2}-[0-9]{7}/gm;
+  let nameRegex = /^[a-zA-Z_ ]+$/;
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const signUpSchema = yup.object().shape({
     name: yup
       .string()
+      .matches(nameRegex, "Name must contain alphabetes")
       .min(3, "Name must contain atleast 3 characters")
       .required("Name is required"),
     email: yup.string().email().required("Email is required!"),

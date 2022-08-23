@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   RefreshControl,
+  Button,
 } from "react-native";
 import EventsDetail from "../components/EventsDetail";
 import axios from "axios";
@@ -24,21 +25,31 @@ const EventsScreen = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const fetchEventsList = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL.localhost}/events`);
+      setEventsList(data);
+      console.log("Data---: ", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchEventsList = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL.localhost}/events`);
-        setEventsList(data);
-        console.log("Data---: ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
     fetchEventsList();
   }, [render]);
   return (
     <View style={styles.container}>
+      <View style={styles.refreshbutton}>
+      <Button      
+              title="Tap to Refresh ↻ "
+              color="black"
+              onPress={() => {
+                fetchEventsList();
+              }}
+      />
+      </View>
       <ScrollView
         style={styles.scrollview}
         refreshControl={
@@ -69,6 +80,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor:"white"
+  },
+  refreshbutton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white"
   },
 });
 

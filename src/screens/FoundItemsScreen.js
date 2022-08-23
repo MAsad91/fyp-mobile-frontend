@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   RefreshControl,
+  Button
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
@@ -28,21 +29,31 @@ const FoundItemsScreen = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const fetchfoundData = async () => {
+    try {
+      const { data } = await axios.get(`${API_URL.localhost}/found-report/`);
+      setFoundItemReport(data);
+      console.log("Data--- ", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
-    const fetchfoundData = async () => {
-      try {
-        const { data } = await axios.get(`${API_URL.localhost}/found-report/`);
-        setFoundItemReport(data);
-        console.log("Data--- ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
     fetchfoundData();
   }, [render]);
   return (
     <View style={styles.container}>
+      <View style={styles.refreshbutton}>
+      <Button      
+              title="Tap to Refresh ↻ "
+              color="black"
+              onPress={() => {
+                fetchfoundData();
+              }}
+      />
+      </View>
       <ScrollView
         style={styles.scrollview}
         refreshControl={
@@ -95,6 +106,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     backgroundColor: "white",
+  },
+  refreshbutton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white"
   },
 });
 

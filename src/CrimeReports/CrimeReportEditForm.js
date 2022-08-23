@@ -19,15 +19,9 @@ const CrimeReportForm = () => {
   let arrayData=[] ;
   for (const value in request) {
     arrayData.push(request[value]);
-    // console.log(`key=${value}: ${request[value]}`);
     
   }
-  // console.log("arrayData: ",arrayData.join(''));
   const requestId = arrayData.join('');
-  // console.log(request);
-  // console.log("id",requestId);
-  
-  // const auth = useContext(AuthContext);
 
   useEffect(() => {
     const LoadReportData = async () => {
@@ -35,10 +29,6 @@ const CrimeReportForm = () => {
         `${API_URL.localhost}/crime-report/report/${requestId}`
       );
       setCrimeReport(result.data.report);
-      // setName(crimeReport.name);
-      // setCrimeType(crimeReport.crimetype);
-      // setDetails(crimeReport.details);
-      // setLocation(crimeReport.location);
       console.log(result.data.report);
     };
     LoadReportData();
@@ -61,36 +51,14 @@ const CrimeReportForm = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  
-
-  
-
- 
-  
-
-  
-
-  //Pick image from gallery
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
-
-  //   console.log("Result---", result);
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
 
   const handleSubmit = async () => {
     console.log("Crime Type====", crimeType);
-    if ( name?.length > 0 && name?.length < 3) {
+    if ( name?.length > 0 && name?.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters and must be in alphabets");
+      return;
     }
     if ( details?.length > 0 && details?.length < 20) {
       setDetailsError(true);
@@ -132,11 +100,6 @@ const CrimeReportForm = () => {
         if (response.status === 200) {
           alert(`Crime Report is Updated Successfully!`);
           navigation.navigate("Crime Reports");
-          // setCrimeType("");
-          // // setImage(null);
-          // setName("");
-          // setDetails("");
-          // setLocation("");
         }
       } catch (error) {
         console.log(error.response.data.message);
@@ -156,7 +119,11 @@ const CrimeReportForm = () => {
           if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
-          } else {
+          } else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
+          }
+          else {
             setNameError(false);
           }
         }}

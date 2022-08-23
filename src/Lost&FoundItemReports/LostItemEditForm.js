@@ -27,11 +27,9 @@ const LostItemForm = () => {
   let arrayData = [];
   for (const value in request) {
     arrayData.push(request[value]);
-    // console.log(`key=${value}: ${request[value]}`);
   }
   console.log("arrayData: ", arrayData.join(""));
   const requestId = arrayData.join("");
-  // console.log(request);
   console.log("id", requestId);
 
   useEffect(() => {
@@ -70,6 +68,8 @@ const LostItemForm = () => {
   const [descriptionError, setDescriptionError] = useState(false);
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState("");
  
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
+
   const handleSubmit = async () => {
     console.log(
       name,
@@ -82,21 +82,24 @@ const LostItemForm = () => {
       description,
     );
 
-    if (name?.length > 0 && name?.length < 3) {
+    if (name?.length > 0 && name?.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters and must be in alphabets");
+      return;
     }
     if (itemName?.length > 0 && itemName?.length < 4) {
       setItemNameError(true);
       setItemNameErrorMsg("Item Name must have 4 or more characters");
     }
-    if (state?.length > 0 && state?.length < 3) {
+    if (state?.length > 0 && state?.length < 3 || !state.match(nameRegex)) {
       setStateError(true);
-      setStateErrorMsg("Item State must have 3 or more characters");
+      setStateErrorMsg("Item State must have 3 or more characters and must be in alphabets");
+      return;
     }
-    if (color?.length > 0 && color?.length < 3) {
+    if (color?.length > 0 && color?.length < 3 || !color.match(nameRegex)) {
       setColorError(true);
-      setColorErrorMsg("Item color must have 3 or more characters");
+      setColorErrorMsg("Item color must have 3 or more characters and must be in alphabets");
+      return;
     }
     if (location?.length > 0 && location?.length < 4) {
       setLocationError(true);
@@ -143,14 +146,14 @@ const LostItemForm = () => {
       if (response.status === 200) {
         alert(`Lost Item Report is Updated successfully!`);
         navigation.navigate("LostItems Reports");
-        setName("");
-        setItemName("");
-        setColor("");
-        setState("");
-        setLostItem("");
-        setDetails("");
-        setDescription("");
-        setLocation("");
+        // setName("");
+        // setItemName("");
+        // setColor("");
+        // setState("");
+        // setLostItem("");
+        // setDetails("");
+        // setDescription("");
+        // setLocation("");
         // setImage(null);
       }
     } catch (error) {
@@ -170,6 +173,9 @@ const LostItemForm = () => {
           if (name.length > 0 && name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
+          }else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
           } else {
             setNameError(false);
           }
@@ -202,6 +208,9 @@ const LostItemForm = () => {
           if (state.length > 0 && state.length < 3) {
             setStateError(true);
             setStateErrorMsg("Item State must have 3 or more characters");
+          }else if (!state.match(nameRegex)) {
+            setStateError(true);
+            setStateErrorMsg("state characters must be alphabet");
           } else {
             setStateError(false);
           }
@@ -254,6 +263,9 @@ const LostItemForm = () => {
           if (color.length > 0 && color.length < 3) {
             setColorError(true);
             setColorErrorMsg("Item color must have 3 or more characters");
+          }else if (!color.match(nameRegex)) {
+            setColorError(true);
+            setColorErrorMsg("color name must be alphabet");
           } else {
             setColorError(false);
           }

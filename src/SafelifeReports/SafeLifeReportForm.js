@@ -27,15 +27,18 @@ const SafeLifeReportForm = () => {
   const [locationErrorMsg, setLocationErrorMsg] = useState("");
   const [image, setImage] = useState();
 
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
+
   const pickImage = (img) => {
     setImage(img);
   };
 
   const handleSubmit = async () => {
     console.log(name, reportType, details, location, image);
-    if (name === "" && name.length < 3) {
+    if (name === "" && name.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters and must be in alphabets");
+      return;
     }
     if (details === "" && details.length < 20) {
       setDetailsError(true);
@@ -93,7 +96,7 @@ const SafeLifeReportForm = () => {
 
   return (
     <ScrollView>
-      <Label text="Name" />
+      <Label text={`\nName`}/>
       <Input
         placeholder="Enter Your Name"
         onChangeText={(name) => {
@@ -101,6 +104,9 @@ const SafeLifeReportForm = () => {
           if (name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
+          }else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
           } else {
             setNameError(false);
           }

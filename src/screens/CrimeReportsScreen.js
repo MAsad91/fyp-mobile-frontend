@@ -5,15 +5,23 @@ import {
   StyleSheet,
   Text,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  Button
 } from "react-native";
 import { AuthContext } from "../context/auth-context";
 import axios from "axios";
 import AddButton from "../components/AddButton";
 import CrimeReportList from "../CrimeReports/CrimeReportList";
 import { API_URL } from "../config";
+const requestCrimeReport=()=> {
+  fetchCrimeReports();
+}
 
 const CrimeReportsScreen = () => {
+
+  const [updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [crimeReport, setCrimeReport] = useState([]);
@@ -22,39 +30,66 @@ const CrimeReportsScreen = () => {
 
 
 
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
+  // const wait = (timeout) => {
+  //   return new Promise((resolve) => setTimeout(resolve, timeout));
+  // };
 
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+ 
+
+  // const onRefresh = React.useCallback(() => {
+  //   setRefreshing(true);
+  //   setRender(true);
+  //   wait(2000).then(() => setRefreshing(false));
+  // }, []);
+
+  const tick = () => {
     setRender(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+  }
+  // useEffect(() => {
+  const onRefreshList = () => {
+      const timerID = setTimeout(() => tick(), 1000)
+      // return () => {
+        clearTimeout(timerID)
+      // }
+    }
+    // onRefreshList();
+  // }, [render]);
+
+  const fetchCrimeReports = async () => {
+    try {
+      const { data } = await axios.get(
+        `${API_URL.localhost}/crime-report/${auth.userId}`
+      );
+      setCrimeReport(data);
+      
+      console.log("Data---: ", data);
+    } catch (error) {
+      console.log(error.response.data.message);
+      alert(error.response.data.message);
+    }
+  };   
 
   useEffect(() => {
-    const fetchCrimeReports = async () => {
-      try {
-        const { data } = await axios.get(
-          `${API_URL.localhost}/crime-report/${auth.userId}`
-        );
-        setCrimeReport(data);
-        console.log("Data---: ", data);
-      } catch (error) {
-        console.log(error.response.data.message);
-        alert(error.response.data.message);
-      }
-    };
+   
     fetchCrimeReports();
   }, [render]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.refreshbutton}>
+      <Button      
+              title="Tap to Refresh ↻"
+              color="black"
+              onPress={() => {
+                fetchCrimeReports();
+              }}
+      />
+      </View>
       <ScrollView
         style={styles.scrollview}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
       >
         {crimeReport.map((user) => {
           console.log("user", user);
@@ -82,7 +117,7 @@ const CrimeReportsScreen = () => {
           onPress={() => {
             navigation.navigate("Main", {
               screen: "CrimeReportForm",
-              params: "post"
+              fetchCrimeReports: fetchCrimeReports,
             });
           }}
         />
@@ -101,6 +136,11 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: "white"
   },
+  refreshbutton: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white"
+  },
   scrollview: {
     // backgroundColor: 'green',
   },
@@ -109,4 +149,5 @@ const styles = StyleSheet.create({
   }
 });
 
+export {requestCrimeReport};
 export default CrimeReportsScreen;

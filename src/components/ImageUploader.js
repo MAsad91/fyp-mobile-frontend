@@ -37,7 +37,7 @@ const ImageUploader = (props) => {
 
   return (
     <View>
-      <Button title="Select Document" onPress={pickDocument} />
+      <Button title="Select Image" onPress={pickDocument} />
       {doc && <Text style={styles.success}>Image is selected</Text>}
       {!doc && <Text style={styles.error}>Image must be choose</Text>}
     </View>

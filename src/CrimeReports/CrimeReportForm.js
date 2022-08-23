@@ -11,15 +11,15 @@ import Button from "../components/Button";
 import ImageUploader from "../components/ImageUploader";
 
 const CrimeReportForm = () => {
-  // const route = useRoute();
-  // const requestMethod = route.params;
-  // console.log(requestMethod);
 
   const auth = useContext(AuthContext);
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
   const [nameErrorMsg, setNameErrorMsg] = useState("");
+  const [nameValid, setNameValid] = useState(false);
+  // const [nameNumberError, setnameNumberError] = useState(false);
+  // const [nameNumberErrorMsg, setnameNumberErrorMsg] = useState("");
   const [crimeType, setCrimeType] = useState("");
   const [crimeTypeError, setCrimeTypeError] = useState(false);
   const [crimeTypeErrorMsg, setCrimeTypeErrorMsg] = useState("");
@@ -31,15 +31,27 @@ const CrimeReportForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [image, setImage] = useState();
 
+  let regex = /^[a-zA-Z_ ]+$/gm;
+  const nameRegex = /^[a-zA-Z_ ]+$/gm;
+  let isValid;
+
   const pickImage = (img) => {
     setImage(img);
   };
 
   const handleSubmit = async () => {
     console.log("Crime Type====", crimeType);
-    if (name === "" && name.length < 3) {
+    console.log("Name check",nameValid);
+    // if(regex.test(name)) {
+    //   setNameError(true);
+    //   setNameErrorMsg("Name characters must be alphabate");
+    //   console.log("Name check condition check",nameValid);
+      
+    // }
+    if (name === "" && name.length < 3 || !name.match(nameRegex)) {
       setNameError(true);
-      setNameErrorMsg("Name must have 3 or more characters");
+      setNameErrorMsg("Name must have 3 or more characters ");
+      return;
     }
     if (details === "" && details.length < 20) {
       setDetailsError(true);
@@ -48,6 +60,7 @@ const CrimeReportForm = () => {
     if (location === "" && location.length < 3) {
       setError(true);
       setErrorMessage("Location must have 3 or more characters");
+      
     }
 
     if (crimeType == "crimetype" || crimeType == "" || crimeType.length === 0) {
@@ -55,6 +68,7 @@ const CrimeReportForm = () => {
       setCrimeTypeErrorMsg("Crime type must be choose");
       return;
     }
+
     if (!image) {
       return;
     } else {
@@ -97,19 +111,45 @@ const CrimeReportForm = () => {
   return (
     <ScrollView>
       <Label text={`\nName`} />
-      <Input
+      {/* <Input
         placeholder="Enter Your Name"
+        onChangeText={(name) => {
+          setName(name); 
+          let isValid = regex.test(name);
+          setNameValid(!isValid);
+          console.log("Name check",nameValid);
+          console.log("check",isNaN(name));
+          if (name.length < 3) {
+            setNameError(true);
+            setNameErrorMsg("Name must have 3 or more characters");
+          } 
+          else if (nameValid) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabate");
+          }
+          else {
+            setNameError(false);
+          }
+        }}
+        value={name}
+        error={nameError === true ? <Text>{nameErrorMsg}</Text> : null }
+      /> */}
+      <Input
+        placeholder="Enter Name"
         onChangeText={(name) => {
           setName(name);
           if (name.length < 3) {
             setNameError(true);
             setNameErrorMsg("Name must have 3 or more characters");
+          } else if (!name.match(nameRegex)) {
+            setNameError(true);
+            setNameErrorMsg("Name characters must be alphabet");
           } else {
             setNameError(false);
           }
         }}
         value={name}
-        error={nameError === true ? <Text>{nameErrorMsg}</Text> : null}
+        error={nameError ? <Text>{nameErrorMsg}</Text> : null}
       />
       <Label text="Choose One Option" />
       <View style={styles.pickerContainer}>

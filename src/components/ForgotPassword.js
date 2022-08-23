@@ -40,7 +40,6 @@ const ForgotPassword = () => {
 
       console.log("response---", response);
       if (response.status === 200) {
-
         alert("OTP Send Successfully!");
         setShowForm(false);
       }
@@ -52,11 +51,11 @@ const ForgotPassword = () => {
     }
   };
   return (
-    <Fragment>
-      <ScrollView>
+    // <Fragment>
+    <ScrollView>
       <View>
         {showForm ? (
-            <Formik
+          <Formik
             validationSchema={signUpSchema}
             initialValues={{
               email: "",
@@ -73,7 +72,7 @@ const ForgotPassword = () => {
             }) => (
               <ScrollView style={styles.forgetscroll}>
                 <Text style={styles.subheading}>Enter Email For OTP</Text>
-    
+
                 <Label />
                 <Label text="Email" />
                 <Input
@@ -98,13 +97,11 @@ const ForgotPassword = () => {
             )}
           </Formik>
         ) : (
-            <ResetPasswordForm email={email}/>
+          <ResetPasswordForm email={email} />
         )}
-      
-    </View>
-      </ScrollView>
-      </Fragment>
-    
+      </View>
+    </ScrollView>
+    // </Fragment>
   );
 };
 
